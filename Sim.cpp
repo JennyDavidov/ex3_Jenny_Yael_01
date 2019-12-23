@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int sim::execute(string *str) {}
+int Sim::execute(string &str) {}
 
-sim::sim() {}
+Sim::Sim() {}
 
