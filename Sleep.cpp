@@ -7,7 +7,7 @@
 using namespace std;
 
 
-int sleep::execute(string *str) {}
+int Sleep::execute(string &str) {}
 
-sleep::sleep() {}
+Sleep::Sleep() {}
 

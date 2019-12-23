@@ -12,6 +12,7 @@ using namespace std;
 
 class OpenDataServerCommand : public Command {
 public:
+    static void openServer(string *str);
     OpenDataServerCommand();
 
     int execute(string *str);

@@ -17,29 +17,29 @@ using namespace std;
 
 vector<string> lexerFunc(ifstream &file);
 
-void parserFunc(vector<string> array, map<string, Command>);
+void parserFunc(vector<string> array, map<string, Command *>);
 
-map<string, Command> mapCreator();
+map<string, Command *> mapCreator();
 
 int main(int argc, char *argv[]) {
 
-    map<string, Command> commandMap;
+    map<string, Command *> commandMap;
     vector<string> array;
     //no arguments provided
     if (argc == 0) {
-        cout << "Exception, no arguments provided" << endl;
+        cerr << "Exception, no arguments provided" << endl;
         return -1;
     } else {
         const char *filename = argv[1];
         ifstream in_file(filename);
         //checking in_file opened fine
         if (!in_file) {
-            cout << "Error opening in_file" << endl;
+            cerr << "Error opening in_file" << endl;
             return -1;
         } else {
             array = lexerFunc(in_file);
             commandMap = mapCreator();
-            parserFunc(array,commandMap);
+            parserFunc(array, commandMap);
         }
         in_file.close();
     }
@@ -114,15 +114,14 @@ vector<string> lexerFunc(ifstream &file) {
     return array;
 }
 
-map<string, Command> mapCreator() {
-    map<string, Command> commandMap;
-    OpenDataServerCommand open;
-    ConnectControlClientCommand connect;
-    Sim sim;
-    Sleep sleep;
-    Print print;
-    commandMap.emplace("openDataServer", open);
-    commandMap.emplace("connectControlClient", connect);
+map<string, Command *> mapCreator() {
+    map<string, Command *> commandMap;
+    Command *open = new OpenDataServerCommand();
+    Command *connect = new ConnectControlClientCommand;
+    Command *sim = new Sim;
+    Command *sleep = new Sleep;
+    Command *print = new Print;
+    commandMap["openDataServer"] = open;
     commandMap.emplace("connectControlClient", connect);
     commandMap.emplace("sim", sim);
     commandMap.emplace("sleep", sleep);
@@ -131,13 +130,31 @@ map<string, Command> mapCreator() {
     return commandMap;
 }
 
-void parserFunc(vector<string> array, map<string, Command> mapCommand) {
+void parserFunc(vector<string> array, map<string, Command *> mapCommand) {
     int index = 0;
-    //Command c;
     while (index < array.size()) {
         if (mapCommand.find(array[index]) != mapCommand.end()) {
-            auto c = (mapCommand.find(array[index]))->second;
-            index += c.execute(&array[index]);
+            auto c = mapCommand.find(array[index])->second;
+            OpenDataServerCommand *open = dynamic_cast<OpenDataServerCommand *>(c);
+            if (open) {
+                index += open->execute(&array.at(index));
+            }
+            ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
+            if (connect) {
+                index += connect->execute(array.at(index));
+            }
+            Sleep *sleep = dynamic_cast<Sleep *>(c);
+            if (sleep) {
+                index += sleep->execute(array.at(index));
+            }
+            Print *print = dynamic_cast<Print *>(c);
+            if (print) {
+                index += print->execute(array.at(index));
+            }
+            Sim *sim = dynamic_cast<Sim *>(c);
+            if (sim) {
+                index += sim->execute(array.at(index));
+            }
         }
     }
 }

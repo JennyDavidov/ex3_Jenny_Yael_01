@@ -12,7 +12,7 @@ class Sleep : public Command {
 public:
     Sleep();
 
-    int execute(string *str);
+    int execute(string &str);
 
 };
 

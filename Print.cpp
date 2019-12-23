@@ -8,6 +8,6 @@
 using namespace std;
 
 
-int print::execute(string *str) {}
+int Print::execute(string &str) {}
 
-print::print() {}
+Print::Print() {}

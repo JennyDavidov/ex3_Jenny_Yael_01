@@ -1,23 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="ex3_Test_Proj" targetName="ex3_Test_Proj" />
+    </generated>
+  </component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8d57d452-80b5-477d-b894-9b0ccf133170" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Command.h" beforeDir="false" afterPath="$PROJECT_DIR$/Command.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConnectControlClientCommand.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectControlClientCommand.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConnectControlClientCommand.h" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectControlClientCommand.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OpenDataServerCommand.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/OpenDataServerCommand.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OpenDataServerCommand.h" beforeDir="false" afterPath="$PROJECT_DIR$/OpenDataServerCommand.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Print.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Print.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Print.h" beforeDir="false" afterPath="$PROJECT_DIR$/Print.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sim.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sim.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sim.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sleep.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sleep.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sleep.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sleep.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectId" id="1VCbbJHYzgxOZbJuz8axKKD9mmb" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
   </component>
   <component name="RunManager">
-    <configuration name="ex3_Test_Proj" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ex3_Test_Proj" TARGET_NAME="ex3_Test_Proj" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ex3_Test_Proj" RUN_TARGET_NAME="ex3_Test_Proj">
+    <configuration name="ex3_Test_Proj" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="testFile.txt" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ex3_Test_Proj" TARGET_NAME="ex3_Test_Proj" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ex3_Test_Proj" RUN_TARGET_NAME="ex3_Test_Proj">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8d57d452-80b5-477d-b894-9b0ccf133170" name="Default Changelist" comment="" />
+      <created>1576760093803</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1576760093803</updated>
+      <workItem from="1576760095905" duration="22869000" />
+    </task>
+    <task id="LOCAL-00001" summary="First Commit">
+      <created>1576760206402</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1576760206402</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="First Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="First Commit" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/main.cpp</url>
+          <line>133</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/OpenDataServerCommand.cpp</url>
+          <line>17</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/OpenDataServerCommand.cpp</url>
+          <line>18</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="CMakeRunConfiguration">
+        <watch expression="*str" language="ObjectiveC" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
