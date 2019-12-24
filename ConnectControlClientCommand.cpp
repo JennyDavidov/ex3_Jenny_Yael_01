@@ -7,7 +7,9 @@
 using namespace std;
 
 
-int ConnectControlClientCommand::execute(string &str) {}
+int ConnectControlClientCommand::execute(string &str) {
+    return 3;
+}
 
 ConnectControlClientCommand::ConnectControlClientCommand() {}
 
