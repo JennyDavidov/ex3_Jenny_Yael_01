@@ -4,11 +4,10 @@
 
 #include "Sim.h"
 #include <string>
-#include <cstring>
 
 using namespace std;
 
-int Sim::execute(string *str) {
+int Sim::execute(string *str, Interpreter* interpreter) {
     //take the var name from the template var NAME -> sim(ADDRESS)
     (str) += 1;
     string key = (*str);

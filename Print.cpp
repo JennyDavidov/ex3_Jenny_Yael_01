@@ -10,9 +10,9 @@
 using namespace std;
 
 
-int Print::execute(string &str) {
+int Print::execute(string *str, Interpreter* interpreter) {
     str += 1;
-    string s = str;
+    string* s = str;
     cout << str;
 }
 

@@ -12,13 +12,14 @@
 #include "Sleep.h"
 #include "Print.h"
 #include "xml.h"
-
+#include "Expression.h"
+#include "interpreter.h"
 
 using namespace std;
 
 vector<string> lexerFunc(ifstream &file);
 
-void parserFunc(vector<string> array, map<string, Command *>);
+void parserFunc(vector<string> array, map<string, Command *>, Interpreter* interpreter);
 
 map<string, Command *> mapCreator();
 
@@ -27,6 +28,7 @@ int main(int argc, char *argv[]) {
     map<string, Command *> commandMap;
     vector<string> array;
     //vector<string> xmlDetails;
+    Interpreter* interpreter = new Interpreter();
     //no arguments provided
     if (argc == 0) {
         cerr << "Exception, no arguments provided" << endl;
@@ -42,7 +44,7 @@ int main(int argc, char *argv[]) {
             //xmlDetails = readingXml();
             array = lexerFunc(in_file);
             commandMap = mapCreator();
-            parserFunc(array, commandMap);
+            parserFunc(array, commandMap, interpreter);
         }
         in_file.close();
     }
@@ -58,7 +60,6 @@ vector<string> lexerFunc(ifstream &file) {
     while (index != string::npos) {
         param = buffer.substr(0, index);
         if (param.find("\t") != string::npos) {
-            int i = param.find("\t");
             param.replace(param.find("\t"), 1, "");
         }
         buffer = buffer.substr(index + 1);
@@ -81,7 +82,6 @@ vector<string> lexerFunc(ifstream &file) {
             while (index != string::npos) {
                 param = buffer.substr(0, index);
                 if (param.find("\t") != string::npos) {
-                    int i = param.find("\t");
                     param.replace(param.find("\t"), 1, "");
                 }
                 buffer = buffer.substr(index + 1);
@@ -102,7 +102,6 @@ vector<string> lexerFunc(ifstream &file) {
                 while (index != string::npos) {
                     param = buffer.substr(0, index);
                     if (param.find("\t") != string::npos) {
-                        int i = param.find("\t");
                         param.replace(param.find("\t"), 1, "");
                     }
                     buffer = buffer.substr(index + 1);
@@ -133,14 +132,14 @@ map<string, Command *> mapCreator() {
     return commandMap;
 }
 
-void parserFunc(vector<string> array, map<string, Command *> mapCommand) {
+void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpreter* interpreter) {
     int index = 0;
     while (index < array.size()) {
         if (mapCommand.find(array[index]) != mapCommand.end()) {
             auto c = mapCommand.find(array[index])->second;
             OpenDataServerCommand *open = dynamic_cast<OpenDataServerCommand *>(c);
             if (open) {
-                index += open->execute(&array.at(index));
+                index += open->execute(&array.at(index), interpreter);
             }
             ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
             if (connect) {

@@ -13,18 +13,25 @@
 #include <map>
 #include "ex1.h"
 #include "xml.h"
+#include "Expression.h"
+#include "interpreter.h"
 
 
 using namespace std;
 
-
-int OpenDataServerCommand::execute(string *str) {
+int OpenDataServerCommand::execute(string *str, Interpreter* interpreter) {
     int server_fd;
     sockaddr_in address;
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     str += 1;
-    unsigned short port = stod(*str);
+    unsigned short port;
+    if (str->find_first_of("+-/*") != string::npos) {
+        Expression* ex = interpreter->interpret(*str);
+        port = ex->calculate();
+    } else {
+        port = stod(*str);
+    }
     address.sin_port = port;
     //First step - Create socket
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -58,25 +65,27 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
     int j = 0;
     int n=0;
     char buffer[1024];
-    while(read(client_socket , buffer, 1024)>0){
-    vector<string> xmlDetails;
-    xmlDetails = readingXml();
-    string temp;
-    for (int i = 0; i < sizeof(buffer); i++) {
-        if (strcmp(",", reinterpret_cast<const char *>(buffer[i])) != 0) {
-            temp = temp + buffer[i];
-        } else {
-            double value = stod(temp);
-            simulatorMap.find(xmlDetails.at(j))
-            Variable *obj = new Variable(xmlDetails.at(j), value);
-            simulatorMap.insert(pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
-            j++;
-            str=0;
+    while(read(client_socket , buffer, 1024)>0) {
+        vector<string> xmlDetails;
+        xmlDetails = readingXml();
+        string temp;
+        for (int i = 0; i < sizeof(buffer); i++) {
+            if (strcmp(",", reinterpret_cast<const char *>(buffer[i])) != 0) {
+                temp = temp + buffer[i];
+            } else {
+                double value = stod(temp);
+                simulatorMap.find(xmlDetails.at(j));
+                Variable *obj = new Variable(xmlDetails.at(j), value);
+                simulatorMap.insert(
+                        pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
+                j++;
+                str = 0;
+            }
         }
     }
-    //writing back to client
+        //writing back to client
 //    char *hello = "Hello, I can hear you! \n";
 //    send(client_socket , hello , strlen(hello) , 0 );
 //    std::cout<<"Hello message sent\n"<<std::endl;
-    return;
-}
+        return;
+    }

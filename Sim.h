@@ -13,7 +13,7 @@ class Sim : public Command {
 public:
     Sim();
 
-    int execute(string *str);
+    int execute(string *str, Interpreter* interpreter);
 };
 
 #endif //EX3_TEST_PROJ_SIM_H
