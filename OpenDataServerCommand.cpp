@@ -8,27 +8,33 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <thread>
-#include <string>
-
+#include "Expression.h"
+#include "interpreter.h"
 
 using namespace std;
 
 
-int OpenDataServerCommand::execute(string *str) {
-    thread serverThread(openServer,str);
+int OpenDataServerCommand::execute(string *str, Interpreter* interpreter) {
+    thread serverThread(openServer,str, interpreter);
     serverThread.detach();
     return 2;
 }
 
 OpenDataServerCommand::OpenDataServerCommand() {}
 
-void OpenDataServerCommand::openServer(string *str) {
+void OpenDataServerCommand::openServer(string *str, Interpreter* interpreter) {
     int server_fd;
     sockaddr_in address;
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     str += 1;
-    unsigned short port = stod(*str);
+    unsigned short port;
+    if (str->find_first_of("+-/*") != string::npos) {
+        Expression* ex = interpreter->interpret(*str);
+        port = ex->calculate();
+    } else {
+        port = stod(*str);
+    }
     address.sin_port = port;
 
     //First step - Create socket

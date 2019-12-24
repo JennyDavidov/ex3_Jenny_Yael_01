@@ -13,7 +13,7 @@ class Print : public Command {
 public:
     Print();
 
-    int execute(string &str);
+    int execute(string *str, Interpreter* interpreter);
 
 };
 
