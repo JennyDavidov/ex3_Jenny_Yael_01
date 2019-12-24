@@ -16,7 +16,7 @@ using namespace std;
 
 int OpenDataServerCommand::execute(string *str) {
     //thread serverThread(openServer,str);
-    openServer(str);
+    //openServer(str);
     return 2;
 }
 
