@@ -19,7 +19,7 @@
 
 using namespace std;
 
-int OpenDataServerCommand::execute(string *str, Interpreter* interpreter) {
+int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     int server_fd;
     sockaddr_in address;
     address.sin_family = AF_INET;

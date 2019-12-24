@@ -4,67 +4,12 @@
 
 #include "ConnectControlClientCommand.h"
 #include <string>
-#include <sys/socket.h>
-#include <iostream>
-#include <unistd.h>
-#include <netinet/in.h>
-#include <thread>
-#include <arpa/inet.h>
 using namespace std;
 
 
-int ConnectControlClientCommand::execute(string *str, Interpreter* interpreter) {
-
+int ConnectControlClientCommand::execute(string &str) {
     return 3;
 }
 
 ConnectControlClientCommand::ConnectControlClientCommand() {}
 
-void ConnectControlClientCommand::openClient(string *str, Interpreter *interpreter) {
-    //create socket
-    int client_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (client_socket == -1) {
-        cerr << "Socket Failed" << endl;
-        exit(-1);
-    }
-
-    sockaddr_in address;
-    address.sin_family = AF_INET;
-    str += 1;
-    address.sin_addr.s_addr = inet_addr(reinterpret_cast<const char *>(*str->c_str()));
-    str += 1;
-    unsigned short port;
-    if (str->find_first_of("+-/*") != string::npos) {
-        Expression* ex = interpreter->interpret(*str);
-        port = ex->calculate();
-    } else {
-        port = stod(*str);
-    }
-    address.sin_port = htons(port);
-
-    // Requesting a connection with the server on local host with port
-    int is_connect = connect(client_socket, (struct sockaddr *)&address, sizeof(address));
-    if (is_connect == -1) {
-        std::cerr << "Could not connect to host server"<<std::endl;
-        exit (-1);
-    } else {
-        std::cout<<"Client is now connected to server" <<std::endl;
-    }
-
-    //if here we made a connection
-    char hello[] = "Hi from client";
-    int is_sent = send(client_socket , hello , strlen(hello) , 0 );
-    if (is_sent == -1) {
-        std::cout<<"Error sending message"<<std::endl;
-    } else {
-        std::cout<<"Hello message sent to server" <<std::endl;
-    }
-
-    char buffer[1024] = {0};
-    int valread = read( client_socket , buffer, 1024);
-    std::cout<<buffer<<std::endl;
-
-    close(client_socket);
-
-    return;
-}
