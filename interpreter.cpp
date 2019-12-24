@@ -33,9 +33,9 @@ void Interpreter::setVariables(string str) {
         //name of variable
         string name = variable.substr(0,endOfNum1);
         //check if it's an illegal name
-        if (!Variable::checkName(name)) {
-            throw "Exception, wrong variable name";
-        } else {
+//        if (!Variable::checkName(name)) {
+//            throw "Exception, wrong variable name";
+//        } else {
             //value of variable
             string value = variable.substr(endOfNum1 + 1, (variable.size() - endOfNum1 - 1));
             for (unsigned j = 0; j < value.size(); j++) {
@@ -71,7 +71,7 @@ void Interpreter::setVariables(string str) {
                 //first variable
                 variables.insert(pair<string, string>(name, value));
             }
-        }
+        //}
         p = p + (endOfNum + 1);
     }
 }

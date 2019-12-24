@@ -12,7 +12,7 @@ using namespace std;
 
 class OpenDataServerCommand : public Command {
 public:
-    static void openServer(string *str);
+    static void openServer(string *str, int client_socket);
     OpenDataServerCommand();
 
     int execute(string *str);

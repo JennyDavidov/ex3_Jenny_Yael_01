@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 
     map<string, Command *> commandMap;
     vector<string> array;
-    vector<string> xmlDetails;
+    //vector<string> xmlDetails;
     //no arguments provided
     if (argc == 0) {
         cerr << "Exception, no arguments provided" << endl;
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
             cerr << "Error opening in_file" << endl;
             return -1;
         } else {
-            xmlDetails = readingXml();
+            //xmlDetails = readingXml();
             array = lexerFunc(in_file);
             commandMap = mapCreator();
             parserFunc(array, commandMap);
