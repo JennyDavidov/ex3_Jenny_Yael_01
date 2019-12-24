@@ -20,8 +20,6 @@ public:
     virtual ~Interpreter();
     void setVariables(string str);
     Expression* interpret(string string);
-
-private:
     bool isEqualOp(stack<string> s, char op);
     bool isHighOp(stack<string> s, char op);
     Expression* anotherExp(queue<string> &output, stack<double> &nums, Expression* ex1);
