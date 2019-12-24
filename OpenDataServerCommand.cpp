@@ -15,8 +15,8 @@ using namespace std;
 
 
 int OpenDataServerCommand::execute(string *str) {
-    //thread serverThread(openServer,str);
-    //openServer(str);
+    thread serverThread(openServer,str);
+    serverThread.detach();
     return 2;
 }
 
@@ -50,15 +50,17 @@ void OpenDataServerCommand::openServer(string *str) {
         cerr << "Accept Failed" << endl;
         exit(-1);
     }
-    close(client_socket); //closing the listening socket
-//    //reading from client
-//    char buffer[1024] = {0};
-//    int valread = read( client_socket , buffer, 1024);
-//    std::cout<<buffer<<std::endl;
-//
-//    //writing back to client
+    //closing the listening socket
+    close(client_socket);
+
+    //reading from client
+    char buffer[1024] = {0};
+    int valread = read( client_socket , buffer, 1024);
+    std::cout<<buffer<<std::endl;
+
+    //writing back to client
 //    char *hello = "Hello, I can hear you! \n";
 //    send(client_socket , hello , strlen(hello) , 0 );
 //    std::cout<<"Hello message sent\n"<<std::endl;
-//    return 0;
+    return;
 }
