@@ -12,9 +12,8 @@ using namespace std;
 class ConnectControlClientCommand : public Command {
 public:
     ConnectControlClientCommand();
-
+    void openClient(string *str, Interpreter *interpreter);
     int execute(string *str, Interpreter* interpreter);
-    static void openClient(string *str, Interpreter* interpreter);
 
 };
 #endif //EX3_TEST_PROJ_CONNECTCONTROLCLIENTCOMMAND_H

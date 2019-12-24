@@ -70,8 +70,12 @@ public:
     virtual ~UMinus();
 };
 class Variable : public Expression{
-    string name;
+    string sim;
     double value;
+    int direction;
+public:
+    void setDirection(int direction);
+
 public:
     Variable(string _name, double _value);
     virtual ~Variable();
@@ -86,7 +90,7 @@ public:
     Variable& operator--();
     Variable& operator+=(double val);
     Variable& operator-=(double val);
-    static bool checkName (string name);
+    //static bool checkName (string name);
 };
 class Value : public Expression{
     double value;

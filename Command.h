@@ -7,11 +7,17 @@
 
 #include <string>
 #include "interpreter.h"
+#include "ex1.h"
 using namespace std;
+
+static map<string, Variable *> simulatorMap;
+static map<string, Variable *> flyMap;
+
 
 class Command {
 public:
     virtual int execute(string &str, Interpreter* interpreter){};
     virtual ~Command(){};
 };
+
 #endif //EX3_TEST_PROJ_COMMAND_H

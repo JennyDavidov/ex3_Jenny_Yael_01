@@ -108,12 +108,12 @@ double UMinus::calculate() {
 }
 
 Variable::Variable(string _name, double _value) {
-    if (!checkName(_name)) {
-        throw "Exception, wrong variable _name";
-    } else {
-        this->name = std::move(_name);
+//    if (!checkName(_name)) {
+//        throw "Exception, wrong variable _name";
+//    } else {
+        this->sim = std::move(_name);
         this->value = _value;
-    }
+  //  }
 }
 Variable::~Variable() {
 }
@@ -142,13 +142,13 @@ Variable& Variable::operator-=(double val) {
     return *this;
 }
 string Variable::getName() const {
-    return name;
+    return sim;
 }
 double Variable::getValue() const {
     return value;
 }
 void Variable::setName(string _name) {
-    Variable::name = std::move(_name);
+    Variable::sim = std::move(_name);
 }
 void Variable::setValue(double _value) {
     Variable::value = _value;
@@ -157,19 +157,19 @@ double Variable::calculate() {
     return this->getValue();
 }
 
-bool Variable::checkName(string name) {
-    if (isalpha(name[0]) || name[0] == '_') {
-        for (unsigned i=1; i < name.size(); i++) {
-            if ((!isalpha(name[i])) && (!isdigit(name[i])) && (name[i] != '_')) {
-                return false;
-            }
-        }
-    }
-    else {
-        return false;
-    }
-    return true;
-}
+//bool Variable::checkName(string sim) {
+//    if (isalpha(sim[0]) || sim[0] == '_') {
+//        for (unsigned i=1; i < sim.size(); i++) {
+//            if ((!isalpha(sim[i])) && (!isdigit(sim[i])) && (sim[i] != '_')) {
+//                return false;
+//            }
+//        }
+//    }
+//    else {
+//        return false;
+//    }
+//    return true;
+//}
 
 Value::Value(double val) {
     this->value = val;
@@ -181,4 +181,8 @@ double Value::getValue() const {
 }
 double Value::calculate() {
     return this->getValue();
+}
+
+void Variable::setDirection(int direction) {
+    Variable::direction = direction;
 }

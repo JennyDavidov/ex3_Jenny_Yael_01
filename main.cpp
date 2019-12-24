@@ -14,6 +14,7 @@
 #include "xml.h"
 #include "Expression.h"
 #include "interpreter.h"
+
 using namespace std;
 
 vector<string> lexerFunc(ifstream &file);
@@ -26,7 +27,7 @@ int main(int argc, char *argv[]) {
 
     map<string, Command *> commandMap;
     vector<string> array;
-    vector<string> xmlDetails;
+    //vector<string> xmlDetails;
     Interpreter* interpreter = new Interpreter();
     //no arguments provided
     if (argc == 0) {
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
             cerr << "Error opening in_file" << endl;
             return -1;
         } else {
-            xmlDetails = readingXml();
+            //xmlDetails = readingXml();
             array = lexerFunc(in_file);
             commandMap = mapCreator();
             parserFunc(array, commandMap, interpreter);
@@ -140,22 +141,22 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             if (open) {
                 index += open->execute(&array.at(index), interpreter);
             }
-//            ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
-//            if (connect) {
-//                index += connect->execute(array.at(index));
-//            }
-//            Sleep *sleep = dynamic_cast<Sleep *>(c);
-//            if (sleep) {
-//                index += sleep->execute(array.at(index));
-//            }
-//            Print *print = dynamic_cast<Print *>(c);
-//            if (print) {
-//                index += print->execute(array.at(index));
-//            }
-//            Sim *sim = dynamic_cast<Sim *>(c);
-//            if (sim) {
-//                index += sim->execute(array.at(index));
-//            }
+            ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
+            if (connect) {
+                index += connect->execute(array.at(index));
+            }
+            Sleep *sleep = dynamic_cast<Sleep *>(c);
+            if (sleep) {
+                index += sleep->execute(array.at(index));
+            }
+            Print *print = dynamic_cast<Print *>(c);
+            if (print) {
+                index += print->execute(array.at(index));
+            }
+            Sim *sim = dynamic_cast<Sim *>(c);
+            if (sim) {
+                index += sim->execute(array.at(index));
+            }
         }
     }
 }
