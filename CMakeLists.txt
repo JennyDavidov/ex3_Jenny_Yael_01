@@ -4,4 +4,4 @@ project(ex3_Test_Proj)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS -pthread)
 
-add_executable(ex3_Test_Proj main.cpp OpenDataServerCommand.cpp ConnectControlClientCommand.cpp ConnectControlClientCommand.h Command.h OpenDataServerCommand.h Sim.cpp Sim.h Sleep.cpp Sleep.h Print.cpp Print.h)
+add_executable(ex3_Test_Proj main.cpp OpenDataServerCommand.cpp ConnectControlClientCommand.cpp ConnectControlClientCommand.h Command.h OpenDataServerCommand.h Sim.cpp Sim.h Sleep.cpp Sleep.h Print.cpp Print.h xml.cpp xml.h)
