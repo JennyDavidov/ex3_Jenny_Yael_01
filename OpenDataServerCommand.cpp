@@ -36,7 +36,7 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     str += 1;
     unsigned short port;
     if (str->find_first_of("+-/*") != string::npos) {
-        Expression* ex = interpreter->interpret(*str);
+        Expression *ex = interpreter->interpret(*str);
         port = ex->calculate();
     } else {
         port = stod(*str);
@@ -58,7 +58,6 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     } else{
         std::cout<<"Server is now listening ..."<<std::endl;
     }
-
     // accepting a client
     int client_socket = accept(socketfd, (struct sockaddr *)&address,
                                (socklen_t*)&address);
@@ -81,9 +80,9 @@ OpenDataServerCommand::OpenDataServerCommand() {}
 void OpenDataServerCommand::openServer(string *str, int client_socket) {
     //reading from client
     int j = 0;
-    int n=0;
+    int n = 0;
     char buffer[1024];
-    while(read(client_socket , buffer, 1024)>0) {
+    while (read(client_socket, buffer, 1024) > 0) {
         vector<string> xmlDetails;
         xmlDetails = readingXml();
         string temp;
@@ -92,18 +91,21 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
                 temp = temp + buffer[i];
             } else {
                 double value = stod(temp);
-                simulatorMap.find(xmlDetails.at(j));
-                Variable *obj = new Variable(xmlDetails.at(j), value);
-                simulatorMap.insert(
-                        pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
+                if (simulatorMap.find(xmlDetails.at(j)) == simulatorMap.end()) {
+                    Variable *obj = new Variable(xmlDetails.at(j), value);
+                    simulatorMap.insert(
+                            pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
+                } else {
+                    simulatorMap.find(xmlDetails.at(j))->second->setValue(value);
+                }
                 j++;
                 str = 0;
             }
         }
     }
-        //writing back to client
+    //writing back to client
 //    char *hello = "Hello, I can hear you! \n";
 //    send(client_socket , hello , strlen(hello) , 0 );
 //    std::cout<<"Hello message sent\n"<<std::endl;
-        return;
-    }
+    return;
+}

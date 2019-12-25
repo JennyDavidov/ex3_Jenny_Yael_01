@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int Sim::execute(string *str, Interpreter* interpreter) {
+int Sim::execute(string *str, Interpreter *interpreter) {
     //take the var name from the template var NAME -> sim(ADDRESS)
     (str) += 1;
     string key = (*str);

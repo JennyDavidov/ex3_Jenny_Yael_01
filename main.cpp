@@ -143,7 +143,7 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             }
 //            ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
 //            if (connect) {
-//                index += connect->execute(array.at(index));
+//                index += connect->execute(&array.at(index),interpreter);
 //            }
 //            Sleep *sleep = dynamic_cast<Sleep *>(c);
 //            if (sleep) {
