@@ -11,22 +11,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d57d452-80b5-477d-b894-9b0ccf133170" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="8d57d452-80b5-477d-b894-9b0ccf133170" name="Default Changelist" comment="FINAL VERSION!!!!!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Command.h" beforeDir="false" afterPath="$PROJECT_DIR$/Command.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectControlClientCommand.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectControlClientCommand.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectControlClientCommand.h" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectControlClientCommand.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OpenDataServerCommand.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/OpenDataServerCommand.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OpenDataServerCommand.h" beforeDir="false" afterPath="$PROJECT_DIR$/OpenDataServerCommand.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Print.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Print.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Print.h" beforeDir="false" afterPath="$PROJECT_DIR$/Print.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sim.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sim.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sim.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sleep.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sleep.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sleep.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sleep.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -91,7 +77,21 @@
       <option name="project" value="LOCAL" />
       <updated>1576760206402</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="FINAL VERSION">
+      <created>1577212256215</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1577212256215</updated>
+    </task>
+    <task id="LOCAL-00003" summary="2512 Commit">
+      <created>1577284525265</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1577284525265</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,7 +102,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -110,31 +112,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="First Commit" />
+    <MESSAGE value="FINAL VERSION" />
+    <MESSAGE value="2512 Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="2512 Commit" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>133</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/OpenDataServerCommand.cpp</url>
-          <line>17</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/OpenDataServerCommand.cpp</url>
-          <line>18</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
         <watch expression="*str" language="ObjectiveC" />
+        <watch expression="array[index]" language="ObjectiveC" />
+        <watch expression="&amp;str" language="ObjectiveC" />
       </configuration>
     </watches-manager>
   </component>
