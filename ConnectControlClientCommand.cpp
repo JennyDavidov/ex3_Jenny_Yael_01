@@ -10,11 +10,13 @@
 #include <netinet/in.h>
 #include <thread>
 #include <arpa/inet.h>
+#include <cstring>
+
 using namespace std;
 
 
-int ConnectControlClientCommand::execute(string *str, Interpreter* interpreter) {
-
+int ConnectControlClientCommand::execute(string *str, Interpreter *interpreter) {
+    openClient(str,interpreter);
     return 3;
 }
 
@@ -31,11 +33,13 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
     sockaddr_in address;
     address.sin_family = AF_INET;
     str += 1;
-    address.sin_addr.s_addr = inet_addr(reinterpret_cast<const char *>(*str->c_str()));
+    (*str).erase((*str).length() - 1);
+    (*str).erase(0,1);
+    address.sin_addr.s_addr = inet_addr(reinterpret_cast<const char *>((*str).c_str()));
     str += 1;
     unsigned short port;
     if (str->find_first_of("+-/*") != string::npos) {
-        Expression* ex = interpreter->interpret(*str);
+        Expression *ex = interpreter->interpret(*str);
         port = ex->calculate();
     } else {
         port = stod(*str);
@@ -43,28 +47,25 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
     address.sin_port = htons(port);
 
     // Requesting a connection with the server on local host with port
-    int is_connect = connect(client_socket, (struct sockaddr *)&address, sizeof(address));
+    int is_connect = connect(client_socket, (struct sockaddr *) &address, sizeof(address));
     if (is_connect == -1) {
-        std::cerr << "Could not connect to host server"<<std::endl;
-        exit (-1);
+        std::cerr << "Could not connect to host server" << std::endl;
+        exit(-1);
     } else {
-        std::cout<<"Client is now connected to server" <<std::endl;
+        std::cout << "Client is now connected to server" << std::endl;
     }
 
     //if here we made a connection
-    char hello[] = "Hi from client";
-    int is_sent = send(client_socket , hello , strlen(hello) , 0 );
+    const char *set = "set controls/flight/rudder 1\r\n";
+    int is_sent = send(client_socket, set, strlen(set), 0);
     if (is_sent == -1) {
-        std::cout<<"Error sending message"<<std::endl;
+        std::cout << "Error sending message" << std::endl;
     } else {
-        std::cout<<"Hello message sent to server" <<std::endl;
+        std::cout << "Hello message sent to server" << std::endl;
     }
-
-    char buffer[1024] = {0};
-    int valread = read( client_socket , buffer, 1024);
-    std::cout<<buffer<<std::endl;
-
+//    char buffer[1024] = {0};
+//    int valread = read( client_socket , buffer, 1024);
+//    std::cout<<buffer<<std::endl;
     close(client_socket);
-
     return;
 }

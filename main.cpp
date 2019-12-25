@@ -141,22 +141,22 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             if (open) {
                 index += open->execute(&array.at(index), interpreter);
             }
-            ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
-            if (connect) {
-                index += connect->execute(array.at(index));
-            }
-            Sleep *sleep = dynamic_cast<Sleep *>(c);
-            if (sleep) {
-                index += sleep->execute(array.at(index));
-            }
-            Print *print = dynamic_cast<Print *>(c);
-            if (print) {
-                index += print->execute(array.at(index));
-            }
-            Sim *sim = dynamic_cast<Sim *>(c);
-            if (sim) {
-                index += sim->execute(array.at(index));
-            }
+//            ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
+//            if (connect) {
+//                index += connect->execute(&array.at(index),interpreter);
+//            }
+//            Sleep *sleep = dynamic_cast<Sleep *>(c);
+//            if (sleep) {
+//                index += sleep->execute(array.at(index));
+//            }
+//            Print *print = dynamic_cast<Print *>(c);
+//            if (print) {
+//                index += print->execute(array.at(index));
+//            }
+//            Sim *sim = dynamic_cast<Sim *>(c);
+//            if (sim) {
+//                index += sim->execute(array.at(index));
+//            }
         }
     }
 }
