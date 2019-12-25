@@ -24,7 +24,7 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     int socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1) {
         //error
-        std::cerr << "Could not create a socket"<<std::endl;
+        std::cerr << "Could not create a socket" << std::endl;
         exit(-1);
     }
 
@@ -47,28 +47,28 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
 
     //the actual bind command
     if (bind(socketfd, (struct sockaddr *) &address, sizeof(address)) == -1) {
-        std::cerr<<"Could not bind the socket to an IP"<<std::endl;
+        std::cerr << "Could not bind the socket to an IP" << std::endl;
         exit(-1);
     }
 
     //making socket listen to the port
     if (listen(socketfd, 5) == -1) { //can also set to SOMAXCON (max connections)
-        std::cerr<<"Error during listening command"<<std::endl;
+        std::cerr << "Error during listening command" << std::endl;
         exit(-1);
-    } else{
-        std::cout<<"Server is now listening ..."<<std::endl;
+    } else {
+        std::cout << "Server is now listening ..." << std::endl;
     }
     // accepting a client
-    int client_socket = accept(socketfd, (struct sockaddr *)&address,
-                               (socklen_t*)&address);
+    int client_socket = accept(socketfd, (struct sockaddr *) &address,
+                               (socklen_t *) &address);
 
     if (client_socket == -1) {
-        std::cerr<<"Error accepting client"<<std::endl;
+        std::cerr << "Error accepting client" << std::endl;
         exit(-1);
     }
 
+    openServer(str, client_socket);
     close(socketfd); //closing the listening socket
-    openServer(str,client_socket);
 //    thread serverThread(openServer, str,client_socket);
 //    serverThread.detach();
 
@@ -82,28 +82,33 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
     int j = 0;
     int n = 0;
     char buffer[1024];
+    string readData;
+    string temp;
     while (read(client_socket, buffer, 1024) > 0) {
         vector<string> xmlDetails;
         xmlDetails = readingXml();
-        string temp;
+        //convert char array to string
+        string s = "";
         for (int i = 0; i < sizeof(buffer); i++) {
-            if (strcmp(",", reinterpret_cast<const char *>(buffer[i])) != 0) {
-                temp = temp + buffer[i];
+            s = s + buffer[i];
+        }
+        size_t index = s.find_first_of("\n");
+        readData = (s).substr(0, index);
+        size_t findComma = (s).find_first_of(",");
+        while (findComma != string::npos) {
+            temp = (s).substr(0, findComma);
+            double value = stod(temp);
+            if (simulatorMap.find(xmlDetails.at(j)) == simulatorMap.end()) {
+                Variable *obj = new Variable(xmlDetails.at(j), value);
+                simulatorMap.insert(pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
             } else {
-                double value = stod(temp);
-                if (simulatorMap.find(xmlDetails.at(j)) == simulatorMap.end()) {
-                    Variable *obj = new Variable(xmlDetails.at(j), value);
-                    simulatorMap.insert(
-                            pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
-                } else {
-                    simulatorMap.find(xmlDetails.at(j))->second->setValue(value);
-                }
-                j++;
-                str = 0;
+                simulatorMap.find(xmlDetails.at(j))->second->setValue(value);
             }
+            findComma = (readData).find_first_of(",");
+            j++;
         }
     }
-    //writing back to client
+//writing back to client
 //    char *hello = "Hello, I can hear you! \n";
 //    send(client_socket , hello , strlen(hello) , 0 );
 //    std::cout<<"Hello message sent\n"<<std::endl;

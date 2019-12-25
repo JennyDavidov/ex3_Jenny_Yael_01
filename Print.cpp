@@ -10,10 +10,10 @@
 using namespace std;
 
 
-int Print::execute(string &str) {
-    str += 1;
-    string s = str;
-    cout << str;
+int Print::execute(string *str, Interpreter *interpreter) {
+//    str += 1;
+//    string s = str;
+//    cout << str;
 }
 
 Print::Print() {}
