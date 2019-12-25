@@ -20,10 +20,19 @@
 using namespace std;
 
 int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
-    int server_fd;
-    sockaddr_in address;
+    //create socket
+    int socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (socketfd == -1) {
+        //error
+        std::cerr << "Could not create a socket"<<std::endl;
+        exit(-1);
+    }
+
+    //bind socket to IP address
+    // we first need to create the sockaddr obj.
+    sockaddr_in address; //in means IP4
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_addr.s_addr = INADDR_ANY; //give me any IP allocated for my machine
     str += 1;
     unsigned short port;
     if (str->find_first_of("+-/*") != string::npos) {
@@ -32,31 +41,37 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     } else {
         port = stod(*str);
     }
-    address.sin_port = port;
-    //First step - Create socket
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        cerr << "Socket Failed" << endl;
+    address.sin_port = htons(port);
+    //we need to convert our number
+    // to a number that the network understands.
+
+    //the actual bind command
+    if (bind(socketfd, (struct sockaddr *) &address, sizeof(address)) == -1) {
+        std::cerr<<"Could not bind the socket to an IP"<<std::endl;
         exit(-1);
     }
-    //Second step - Bind
-    if (bind(server_fd, (struct sockaddr *) &address, sizeof(address)) == -1) {
-        cerr << "Bind Failed" << endl;
+
+    //making socket listen to the port
+    if (listen(socketfd, 5) == -1) { //can also set to SOMAXCON (max connections)
+        std::cerr<<"Error during listening command"<<std::endl;
+        exit(-1);
+    } else{
+        std::cout<<"Server is now listening ..."<<std::endl;
+    }
+    // accepting a client
+    int client_socket = accept(socketfd, (struct sockaddr *)&address,
+                               (socklen_t*)&address);
+
+    if (client_socket == -1) {
+        std::cerr<<"Error accepting client"<<std::endl;
         exit(-1);
     }
-    if (listen(server_fd, 1) == -1) {
-        cerr << "Listen Failed" << endl;
-        exit(-1);
-    }
-    int addLen = sizeof(address);
-    int client_socket = accept(server_fd, (struct sockaddr *) &address, (socklen_t *) &addLen);
-    if (client_socket < 0) {
-        cerr << "Accept Failed" << endl;
-        exit(-1);
-    }
-    openServer(str, client_socket);
-    //thread serverThread(openServer, str,client_socket);
-    //serverThread.detach();
-    close(client_socket);
+
+    close(socketfd); //closing the listening socket
+    openServer(str,client_socket);
+//    thread serverThread(openServer, str,client_socket);
+//    serverThread.detach();
+
     return 2;
 }
 
