@@ -186,3 +186,7 @@ double Value::calculate() {
 void Variable::setDirection(int direction) {
     Variable::direction = direction;
 }
+
+int Variable::getDirection() const {
+    return direction;
+}

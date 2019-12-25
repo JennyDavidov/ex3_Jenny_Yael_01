@@ -41,7 +41,6 @@ int main(int argc, char *argv[]) {
             cerr << "Error opening in_file" << endl;
             return -1;
         } else {
-            //xmlDetails = readingXml();
             array = lexerFunc(in_file);
             commandMap = mapCreator();
             parserFunc(array, commandMap, interpreter);
@@ -55,7 +54,9 @@ vector<string> lexerFunc(ifstream &file) {
     vector<string> array;
     int i = 0;
     string buffer, param;
+    //reading the first line
     getline(file, buffer);
+    //separate it by ( or ,
     size_t index = buffer.find_first_of("(,");
     while (index != string::npos) {
         param = buffer.substr(0, index);
@@ -72,30 +73,59 @@ vector<string> lexerFunc(ifstream &file) {
         param.replace(param.find("\t"), 1, "");
     }
     array.push_back(param);
+    //reading all other lines of file
     while (getline(file, buffer)) {
         //if the line is var definition
         size_t isVar = buffer.find("var");
         if (isVar != string::npos) {
             array.push_back("var");
             buffer = buffer.substr(4);
-            index = buffer.find_first_of(" (");
-            while (index != string::npos) {
-                param = buffer.substr(0, index);
-                if (param.find("\t") != string::npos) {
-                    param.replace(param.find("\t"), 1, "");
-                }
-                buffer = buffer.substr(index + 1);
-                array.push_back(param);
-                index = buffer.find_first_of(" (");
+            index = buffer.find("->");
+            if (index == string::npos) {
+                index = buffer.find("<-");
             }
-            param = buffer.erase(buffer.length() - 1);
-            array.push_back(param);
+            if (index == string::npos) {
+                array.push_back(buffer);
+            } else {
+                //insert name variable
+                param = buffer.substr(0, index);
+                param.replace(param.find(" "), 1, "");
+                array.push_back(param);
+                buffer = buffer.substr(index);
+                //insert arrow
+                param = buffer.substr(0, 2);
+                array.push_back(param);
+                buffer = buffer.substr(2);
+                //insert the word 'sim'
+                index = buffer.find_first_of("(");
+                param = buffer.substr(0, index);
+                param.replace(param.find(" "), 1, "");
+                array.push_back(param);
+                //insert sim directory
+                param = buffer.substr(index+1, buffer.length() - 1);
+                array.push_back(param);
+            }
         }
             //other lines that aren't var definition
         else {
-            if ((buffer.find("while") != string::npos) || (buffer.find("if") != string::npos) ||
-                (buffer.find(" = ") != string::npos)
-                || (buffer.find('}') != string::npos)) {
+            if (buffer.find("while") != string::npos) {
+                //inserting 'while'
+                param = buffer.substr(0,5);
+                array.push_back(param);
+                //insert rest of buffer
+                buffer = buffer.substr(6);
+                array.push_back(buffer);
+            } else if (buffer.find("if") != string::npos) {
+                //insert 'if'
+                param = buffer.substr(0,2);
+                array.push_back(param);
+                //insert rest of buffer
+                buffer = buffer.substr(3);
+                array.push_back(buffer);
+            } else if (buffer.find(" = ") != string::npos) {
+                array.push_back("ass");
+                array.push_back(buffer);
+            } else if (buffer.find('}') != string::npos) {
                 array.push_back(buffer);
             } else {
                 index = buffer.find_first_of("(,");
@@ -125,7 +155,7 @@ map<string, Command *> mapCreator() {
     Command *print = new Print;
     commandMap["openDataServer"] = open;
     commandMap.emplace("connectControlClient", connect);
-    commandMap.emplace("sim", sim);
+    commandMap.emplace("var", sim);
     commandMap.emplace("sleep", sleep);
     commandMap.emplace("print", print);
 
