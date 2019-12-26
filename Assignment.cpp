@@ -35,6 +35,15 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
     }
     //Update value in fly map
     flyMap.find(name)->second->setValue(doubleValue);
+    //Prepare set message to simulator
+    string path = flyMap.find(name)->second->getName();
+    double valueForSet =  flyMap.find(name)->second->getValue();
+    string valueSetString = to_string(valueForSet);
+    string message = "set " + path+ " " + valueSetString + "\r\n";
+    ssize_t return_val;
+    // Send message to the server
+
+    //returl_val = write(sockfd, message.c_str(), message.length());
 
 }
 
