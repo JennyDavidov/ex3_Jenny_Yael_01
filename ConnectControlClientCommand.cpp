@@ -16,7 +16,7 @@ using namespace std;
 
 
 int ConnectControlClientCommand::execute(string *str, Interpreter *interpreter) {
-    openClient(str,interpreter);
+    openClient(str, interpreter);
     return 3;
 }
 
@@ -34,7 +34,7 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
     address.sin_family = AF_INET;
     str += 1;
     (*str).erase((*str).length() - 1);
-    (*str).erase(0,1);
+    (*str).erase(0, 1);
     address.sin_addr.s_addr = inet_addr(reinterpret_cast<const char *>((*str).c_str()));
     str += 1;
     unsigned short port;
@@ -60,9 +60,8 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
 }
 
 void ConnectControlClientCommand::sendToSimulator(int client_socket) {
-    while(!parserDone) {
+    while (!parserDone) {
         if (message != NULL) {
-            const char* command = message;
             int is_sent = send(client_socket, message, strlen(message), 0);
             if (is_sent == -1) {
                 std::cout << "Error sending message" << std::endl;
