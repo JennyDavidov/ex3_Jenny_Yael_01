@@ -18,6 +18,9 @@
 
 
 using namespace std;
+extern string xmlDetails[36];
+extern map<string, Variable *> simulatorMap;
+extern map<string, Variable *> flyMap;
 
 int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     //create socket
@@ -75,6 +78,7 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
 OpenDataServerCommand::OpenDataServerCommand() {}
 
 void OpenDataServerCommand::openServer(string *str, int client_socket) {
+
     //reading from client
     int j = 0;
     int n = 0;
@@ -82,8 +86,6 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
     string readData;
     string temp;
     while (read(client_socket, buffer, 1024) > 0) {
-        vector<string> xmlDetails;
-        xmlDetails = readingXml();
         //convert char array to string
         string s = "";
         for (int i = 0; i < sizeof(buffer); i++) {
@@ -96,23 +98,24 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
             temp = (readData).substr(0, findComma);
             readData = readData.substr(findComma + 1);
             double value = stod(temp);
-            if (simulatorMap.find(xmlDetails.at(j)) == simulatorMap.end()) {
-                Variable *obj = new Variable(xmlDetails.at(j), value);
-                simulatorMap.insert(pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
+            if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
+                //Variable *obj = new Variable(xmlDetails[j], value);
+                //simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], reinterpret_cast<Variable *const>(&obj)));
+                simulatorMap.insert(pair<string, Variable *>(xmlDetails[j],new Variable(xmlDetails[j], value)));
             } else {
-                simulatorMap.find(xmlDetails.at(j))->second->setValue(value);
+                simulatorMap.find(xmlDetails[j])->second->setValue(value);
             }
             findComma = (readData).find_first_of(",");
             j++;
             if ((j == 35) && (findComma == string::npos) && (readData != "")) {
                 double value = stod(readData);
                 readData = "";
-                if (simulatorMap.find(xmlDetails.at(j)) == simulatorMap.end()) {
-                    Variable *obj = new Variable(xmlDetails.at(j), value);
-                    simulatorMap.insert(
-                            pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
+                if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
+                    //Variable *obj = new Variable(xmlDetails[j], value);
+                    //simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], reinterpret_cast<Variable *const>(&obj)));
+                    simulatorMap.insert(pair<string, Variable *>(xmlDetails[j],new Variable(xmlDetails[j], value)));
                 } else {
-                    simulatorMap.find(xmlDetails.at(j))->second->setValue(value);
+                    simulatorMap.find(xmlDetails[j])->second->setValue(value);
                 }
                 j++;
             }

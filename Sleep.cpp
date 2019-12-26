@@ -12,15 +12,18 @@ using namespace std;
 int Sleep::execute(string *str, Interpreter *interpreter) {
     double temp;
     int duration;
-    if ((*str).find_first_of("+-/*") != string::npos) {
-        Expression *ex = interpreter->interpret(*str);
-        temp = ex->calculate();
-        duration = (int) temp;
-    } else {
-        duration = stoi(*str);
-    }
-    chrono::duration<int, milli> d(duration);
-    this_thread::sleep_for(d);
+//    str+=1;
+//    if ((*str).find_first_of("+-/*") != string::npos) {
+//        Expression *ex = interpreter->interpret(*str);
+//        temp = ex->calculate();
+//        duration = (int) temp;
+//    } else {
+//        string::size_type sz;
+//        duration = stoi(*str,&sz);
+//    }
+//    chrono::duration<int, milli> d(duration);
+//    this_thread::sleep_for(d);
+    return 2;
 }
 
 Sleep::Sleep() {}

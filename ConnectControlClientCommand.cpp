@@ -13,6 +13,9 @@
 #include <cstring>
 
 using namespace std;
+extern map<string, Variable *> simulatorMap;
+extern map<string, Variable *> flyMap;
+extern string message;
 
 
 int ConnectControlClientCommand::execute(string *str, Interpreter *interpreter) {
@@ -56,20 +59,22 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
     }
     thread clientThread(sendToSimulator, client_socket);
     clientThread.detach();
-    close(client_socket);
+    //close(client_socket);
     return;
 }
 
 void ConnectControlClientCommand::sendToSimulator(int client_socket) {
     while (!parserDone) {
-        if (message != NULL) {
-            int is_sent = send(client_socket, message, strlen(message), 0);
+        if (message != "") {
+            const char * c = message.c_str();
+            //message = message.c_str();
+            int is_sent = send(client_socket, c, strlen(c), 0);
             if (is_sent == -1) {
                 std::cout << "Error sending message" << std::endl;
             } else {
                 std::cout << "Hello message sent to server" << std::endl;
             }
-            message = NULL;
+            message = "";
         }
     }
 }
