@@ -3,6 +3,7 @@
 //
 
 #include "Sim.h"
+#include "Assignment.h"
 #include <string>
 
 using namespace std;
