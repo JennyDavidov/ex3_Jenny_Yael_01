@@ -12,7 +12,8 @@ using namespace std;
 
 static map<string, Variable *> simulatorMap;
 static map<string, Variable *> flyMap;
-
+static bool parserDone = false;
+static char* message = NULL;
 
 class Command {
 public:
