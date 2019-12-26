@@ -8,6 +8,7 @@
 #include <string>
 #include "interpreter.h"
 #include "ex1.h"
+
 using namespace std;
 
 static map<string, Variable *> simulatorMap;
@@ -17,8 +18,11 @@ static const char *message = NULL;
 
 class Command {
 public:
-    virtual int execute(string &str, Interpreter* interpreter){};
-    virtual ~Command(){};
+
+public:
+    virtual int execute(string &str, Interpreter *interpreter) {};
+
+    virtual ~Command() {};
 };
 
 #endif //EX3_TEST_PROJ_COMMAND_H

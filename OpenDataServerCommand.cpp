@@ -66,8 +66,6 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
         std::cerr << "Error accepting client" << std::endl;
         exit(-1);
     }
-
-    openServer(str, client_socket);
     close(socketfd); //closing the listening socket
     thread serverThread(openServer, str, client_socket);
     serverThread.detach();
@@ -93,9 +91,10 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
         }
         size_t index = s.find_first_of("\n");
         readData = (s).substr(0, index);
-        size_t findComma = (s).find_first_of(",");
-        while (findComma != string::npos) {
-            temp = (s).substr(0, findComma);
+        size_t findComma = (readData).find_first_of(",");
+        while ((findComma != string::npos) && (j < 36)) {
+            temp = (readData).substr(0, findComma);
+            readData = readData.substr(findComma + 1);
             double value = stod(temp);
             if (simulatorMap.find(xmlDetails.at(j)) == simulatorMap.end()) {
                 Variable *obj = new Variable(xmlDetails.at(j), value);
@@ -105,6 +104,18 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
             }
             findComma = (readData).find_first_of(",");
             j++;
+            if ((j == 35) && (findComma == string::npos) && (readData != "")) {
+                double value = stod(readData);
+                readData = "";
+                if (simulatorMap.find(xmlDetails.at(j)) == simulatorMap.end()) {
+                    Variable *obj = new Variable(xmlDetails.at(j), value);
+                    simulatorMap.insert(
+                            pair<string, Variable *>(xmlDetails.at(j), reinterpret_cast<Variable *const>(&obj)));
+                } else {
+                    simulatorMap.find(xmlDetails.at(j))->second->setValue(value);
+                }
+                j++;
+            }
         }
     }
 //writing back to client
