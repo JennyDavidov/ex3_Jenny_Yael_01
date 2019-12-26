@@ -11,8 +11,8 @@
 
 using namespace std;
 
-static map<string, Variable *> simulatorMap;
-static map<string, Variable *> flyMap;
+//static map<string, Variable *> simulatorMap;
+//static map<string, Variable *> flyMap;
 static bool parserDone = false;
 static const char *message = NULL;
 

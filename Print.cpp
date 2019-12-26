@@ -11,9 +11,12 @@ using namespace std;
 
 
 int Print::execute(string *str, Interpreter *interpreter) {
-//    str += 1;
-//    string s = str;
-//    cout << str;
+    str += 1;
+    string s = *str;
+    s.erase(0, 1);
+    s.erase(s.length() - 1, 1);
+    cout << s << endl;
+    return 2;
 }
 
 Print::Print() {}

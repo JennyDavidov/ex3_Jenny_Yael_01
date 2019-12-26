@@ -7,7 +7,8 @@
 #include <string>
 
 using namespace std;
-
+extern map<string, Variable *> simulatorMap;
+extern map<string, Variable *> flyMap;
 
 int Assignment::execute(string *str, Interpreter *interpreter) {
     //skip the "ass"

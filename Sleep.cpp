@@ -21,6 +21,7 @@ int Sleep::execute(string *str, Interpreter *interpreter) {
     }
     chrono::duration<int, milli> d(duration);
     this_thread::sleep_for(d);
+    return 2;
 }
 
 Sleep::Sleep() {}

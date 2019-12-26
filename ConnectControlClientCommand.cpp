@@ -13,6 +13,8 @@
 #include <cstring>
 
 using namespace std;
+extern map<string, Variable *> simulatorMap;
+extern map<string, Variable *> flyMap;
 
 
 int ConnectControlClientCommand::execute(string *str, Interpreter *interpreter) {

@@ -6,6 +6,8 @@
 #include <string>
 
 using namespace std;
+extern map<string, Variable *> simulatorMap;
+extern map<string, Variable *> flyMap;
 
 int Sim::execute(string *str, Interpreter *interpreter) {
     int index;

@@ -17,11 +17,13 @@
 #include "Assignment.h"
 
 using namespace std;
-
+extern string xmlDetails[36];
+map<string, Variable *> simulatorMap;
+map<string, Variable *> flyMap;
 
 vector<string> lexerFunc(ifstream &file);
 
-void parserFunc(vector<string> array, map<string, Command *>, Interpreter* interpreter);
+void parserFunc(vector<string> array, map<string, Command *>, Interpreter *interpreter);
 
 map<string, Command *> mapCreator();
 
@@ -30,7 +32,7 @@ int main(int argc, char *argv[]) {
     map<string, Command *> commandMap;
     vector<string> array;
     //vector<string> xmlDetails;
-    Interpreter* interpreter = new Interpreter();
+    Interpreter *interpreter = new Interpreter();
     //no arguments provided
     if (argc == 0) {
         cerr << "Exception, no arguments provided" << endl;
@@ -43,6 +45,7 @@ int main(int argc, char *argv[]) {
             cerr << "Error opening in_file" << endl;
             return -1;
         } else {
+            readingXml();
             array = lexerFunc(in_file);
             commandMap = mapCreator();
             parserFunc(array, commandMap, interpreter);
@@ -104,22 +107,25 @@ vector<string> lexerFunc(ifstream &file) {
                 param.replace(param.find(" "), 1, "");
                 array.push_back(param);
                 //insert sim directory
-                param = buffer.substr(index+1, buffer.length() - 1);
-                array.push_back(param);
+                buffer = buffer.substr(index + 1);
+                buffer.erase(buffer.length() - 1);
+                buffer.erase(0, 1);
+                buffer.erase(buffer.length() - 1, 1);
+                array.push_back(buffer);
             }
         }
             //other lines that aren't var definition
         else {
             if (buffer.find("while") != string::npos) {
                 //inserting 'while'
-                param = buffer.substr(0,5);
+                param = buffer.substr(0, 5);
                 array.push_back(param);
                 //insert rest of buffer
                 buffer = buffer.substr(6);
                 array.push_back(buffer);
             } else if (buffer.find("if") != string::npos) {
                 //insert 'if'
-                param = buffer.substr(0,2);
+                param = buffer.substr(0, 2);
                 array.push_back(param);
                 //insert rest of buffer
                 buffer = buffer.substr(3);
@@ -140,8 +146,8 @@ vector<string> lexerFunc(ifstream &file) {
                     array.push_back(param);
                     index = buffer.find_first_of("(,");
                 }
-                param = buffer.erase(buffer.length() - 1);
-                array.push_back(param);
+                buffer.erase(buffer.length() - 1);
+                array.push_back(buffer);
             }
         }
     }
@@ -159,13 +165,14 @@ map<string, Command *> mapCreator() {
     commandMap["openDataServer"] = open;
     commandMap.emplace("connectControlClient", connect);
     commandMap.emplace("var", sim);
-    commandMap.emplace("sleep", sleep);
+    commandMap.emplace("Sleep", sleep);
+    commandMap.emplace("Print", print);
     commandMap.emplace("ass", ass);
 
     return commandMap;
 }
 
-void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpreter* interpreter) {
+void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpreter *interpreter) {
     int index = 0;
     while (index < array.size()) {
         if (mapCommand.find(array[index]) != mapCommand.end()) {
@@ -176,23 +183,23 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             }
             ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
             if (connect) {
-                index += connect->execute(&array.at(index),interpreter);
+                index += connect->execute(&array.at(index), interpreter);
             }
             Sleep *sleep = dynamic_cast<Sleep *>(c);
             if (sleep) {
-                index += sleep->execute(&array.at(index),interpreter);
+                index += sleep->execute(&array.at(index), interpreter);
             }
             Print *print = dynamic_cast<Print *>(c);
             if (print) {
-                index += print->execute(&array.at(index),interpreter);
+                index += print->execute(&array.at(index), interpreter);
             }
             Sim *sim = dynamic_cast<Sim *>(c);
             if (sim) {
-                index += sim->execute(&array.at(index),interpreter);
+                index += sim->execute(&array.at(index), interpreter);
             }
             Assignment *ass = dynamic_cast<Assignment *>(c);
             if (ass) {
-                index += ass->execute(&array.at(index),interpreter);
+                index += ass->execute(&array.at(index), interpreter);
             }
 
         }

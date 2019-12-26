@@ -4,8 +4,12 @@
 
 #ifndef EX3_TEST_PROJ_XML_H
 #define EX3_TEST_PROJ_XML_H
+
 #include <vector>
 #include <string>
+
 using namespace std;
-vector<string> readingXml();
+
+void readingXml();
+
 #endif //EX3_TEST_PROJ_XML_H
