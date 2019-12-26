@@ -11,7 +11,7 @@ using namespace std;
 
 int Assignment::execute(string *str, Interpreter *interpreter) {
     //skip the "ass"
-    str+=1;
+    str += 1;
     //if the string contains expression
     //split it into Var name , value
     string name, value;
@@ -37,9 +37,11 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
     flyMap.find(name)->second->setValue(doubleValue);
     //Prepare set message to simulator
     string path = flyMap.find(name)->second->getName();
-    double valueForSet =  flyMap.find(name)->second->getValue();
+    path = path.erase(0, 1);
+    path = path.erase(path.length() - 1);
+    double valueForSet = flyMap.find(name)->second->getValue();
     string valueSetString = to_string(valueForSet);
-    string message = "set " + path+ " " + valueSetString + "\r\n";
+    string message = "set " + path + " " + valueSetString + "\r\n";
     ssize_t return_val;
     // Send message to the server
 
