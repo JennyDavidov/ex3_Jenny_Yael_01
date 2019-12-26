@@ -5,10 +5,12 @@
 #include "Assignment.h"
 #include "Sleep.h"
 #include <string>
+#include <cstring>
 
 using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
+extern string message;
 
 int Assignment::execute(string *str, Interpreter *interpreter) {
     //skip the "ass"
@@ -32,18 +34,18 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
         Expression *ex = interpreter->interpret(*str);
         doubleValue = ex->calculate();
     } else {
-        doubleValue = stod(*str);
+        doubleValue = stod(value);
     }
     //Update value in fly map
-    flyMap.find(name)->second->setValue(doubleValue);
+    auto c = flyMap.find(name);
+    c->second->setValue(doubleValue);
     //Prepare set message to simulator
-    string path = flyMap.find(name)->second->getName();
-    path = path.erase(0, 1);
-    path = path.erase(path.length() - 1);
+    string path = c->second->getName();
     double valueForSet = flyMap.find(name)->second->getValue();
     string valueSetString = to_string(valueForSet);
     string messageToSet = "set " + path + " " + valueSetString + "\r\n";
-    message = messageToSet.c_str();
+    message = messageToSet;
+    return 2;
 }
 
 Assignment::Assignment() {}

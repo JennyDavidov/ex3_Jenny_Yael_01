@@ -20,6 +20,7 @@ using namespace std;
 extern string xmlDetails[36];
 map<string, Variable *> simulatorMap;
 map<string, Variable *> flyMap;
+string message;
 
 vector<string> lexerFunc(ifstream &file);
 

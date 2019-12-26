@@ -25,7 +25,7 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         string str1 = (*str).substr(index + 1);
         (str1).replace((str1).find(" "), 1, "");
         //finding existing variable
-        Variable* copy = flyMap.find(str1)->second;
+        auto copy = flyMap.find(str1)->second;
         //copying details of existing variable
         dir = copy->getDirection();
         string sim = copy->getName();
@@ -48,9 +48,9 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         }
         (str) += 2;
         string findSim = (*str);
-        Variable *obj = simulatorMap.find(findSim)->second;
-        obj->setDirection(dir);
-        flyMap.insert(pair<string, Variable *>(key, reinterpret_cast<Variable *const>(&obj)));
+        //Variable *obj = simulatorMap.find(findSim)->second;
+        simulatorMap.find(findSim)->second->setDirection(dir);
+        flyMap.insert(pair<string, Variable *>(key, simulatorMap.find(findSim)->second));
         return 5;
     }
 }
