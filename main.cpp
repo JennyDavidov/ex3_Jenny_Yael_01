@@ -14,6 +14,7 @@
 #include "xml.h"
 #include "Expression.h"
 #include "interpreter.h"
+#include "Assignment.h"
 
 using namespace std;
 
@@ -123,11 +124,12 @@ map<string, Command *> mapCreator() {
     Command *sim = new Sim;
     Command *sleep = new Sleep;
     Command *print = new Print;
+    Command *ass = new Assignment;
     commandMap["openDataServer"] = open;
     commandMap.emplace("connectControlClient", connect);
     commandMap.emplace("sim", sim);
     commandMap.emplace("sleep", sleep);
-    commandMap.emplace("print", print);
+    commandMap.emplace("ass", ass);
 
     return commandMap;
 }
@@ -141,22 +143,27 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             if (open) {
                 index += open->execute(&array.at(index), interpreter);
             }
-//            ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
-//            if (connect) {
-//                index += connect->execute(&array.at(index),interpreter);
-//            }
-//            Sleep *sleep = dynamic_cast<Sleep *>(c);
-//            if (sleep) {
-//                index += sleep->execute(array.at(index));
-//            }
-//            Print *print = dynamic_cast<Print *>(c);
-//            if (print) {
-//                index += print->execute(array.at(index));
-//            }
-//            Sim *sim = dynamic_cast<Sim *>(c);
-//            if (sim) {
-//                index += sim->execute(array.at(index));
-//            }
+            ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
+            if (connect) {
+                index += connect->execute(&array.at(index),interpreter);
+            }
+            Sleep *sleep = dynamic_cast<Sleep *>(c);
+            if (sleep) {
+                index += sleep->execute(&array.at(index),interpreter);
+            }
+            Print *print = dynamic_cast<Print *>(c);
+            if (print) {
+                index += print->execute(&array.at(index),interpreter);
+            }
+            Sim *sim = dynamic_cast<Sim *>(c);
+            if (sim) {
+                index += sim->execute(&array.at(index),interpreter);
+            }
+            Assignment *ass = dynamic_cast<Assignment *>(c);
+            if (ass) {
+                index += ass->execute(&array.at(index),interpreter);
+            }
+
         }
     }
 }

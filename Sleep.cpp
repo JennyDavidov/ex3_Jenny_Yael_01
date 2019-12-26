@@ -4,15 +4,23 @@
 
 #include "Sleep.h"
 #include <string>
+#include <thread>
+
 using namespace std;
 
 
-int Sleep::execute(string &str) {
-    //USE stoi
-//    main_thread_id.
-//    std::this_thread::sleep_for (std::chrono::seconds(1));
-//    main.cpp::
-
+int Sleep::execute(string *str, Interpreter *interpreter) {
+    double temp;
+    int duration;
+    if ((*str).find_first_of("+-/*") != string::npos) {
+        Expression *ex = interpreter->interpret(*str);
+        temp = ex->calculate();
+        duration = (int) temp;
+    } else {
+        duration = stoi(*str);
+    }
+    chrono::duration<int, milli> d(duration);
+    this_thread::sleep_for(d);
 }
 
 Sleep::Sleep() {}
