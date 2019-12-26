@@ -69,9 +69,8 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
 
     openServer(str, client_socket);
     close(socketfd); //closing the listening socket
-//    thread serverThread(openServer, str,client_socket);
-//    serverThread.detach();
-
+    thread serverThread(openServer, str, client_socket);
+    serverThread.detach();
     return 2;
 }
 
