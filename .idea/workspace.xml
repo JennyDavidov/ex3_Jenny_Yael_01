@@ -11,8 +11,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d57d452-80b5-477d-b894-9b0ccf133170" name="Default Changelist" comment="FINAL VERSION!!!!!">
+    <list default="true" id="8d57d452-80b5-477d-b894-9b0ccf133170" name="Default Changelist" comment="Commit thread open + Ass create string">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Command.h" beforeDir="false" afterPath="$PROJECT_DIR$/Command.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConnectControlClientCommand.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectControlClientCommand.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OpenDataServerCommand.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/OpenDataServerCommand.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,6 +27,9 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FavoritesManager">
+    <favorites_list name="ex3_Test_Proj" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -35,6 +41,7 @@
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectId" id="1VCbbJHYzgxOZbJuz8axKKD9mmb" />
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -52,7 +59,7 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="ex3_Test_Proj" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="testFile.txt" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ex3_Test_Proj" TARGET_NAME="ex3_Test_Proj" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ex3_Test_Proj" RUN_TARGET_NAME="ex3_Test_Proj">
+    <configuration name="ex3_Test_Proj" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="fly.txt" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ex3_Test_Proj" TARGET_NAME="ex3_Test_Proj" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ex3_Test_Proj" RUN_TARGET_NAME="ex3_Test_Proj">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -69,6 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1576760093803</updated>
       <workItem from="1576760095905" duration="22869000" />
+      <workItem from="1577292371783" duration="13229000" />
     </task>
     <task id="LOCAL-00001" summary="First Commit">
       <created>1576760206402</created>
@@ -91,7 +99,42 @@
       <option name="project" value="LOCAL" />
       <updated>1577284525265</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Ass">
+      <created>1577284958005</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1577284958005</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Ass 19:47">
+      <created>1577296132718</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1577296132718</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Commit thread open + Ass create string">
+      <created>1577351677181</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1577351677181</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Commit thread open + Ass create string + withour &quot;&quot;">
+      <created>1577352153890</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1577352153890</updated>
+    </task>
+    <task id="LOCAL-00008" summary="set is working">
+      <created>1577353278929</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1577353278929</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -114,14 +157,47 @@
     <MESSAGE value="First Commit" />
     <MESSAGE value="FINAL VERSION" />
     <MESSAGE value="2512 Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="2512 Commit" />
+    <MESSAGE value="Ass" />
+    <MESSAGE value="Ass 19:47" />
+    <MESSAGE value="Commit thread open + Ass create string" />
+    <MESSAGE value="Commit thread open + Ass create string + withour &quot;&quot;" />
+    <MESSAGE value="set is working" />
+    <option name="LAST_COMMIT_MESSAGE" value="set is working" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/OpenDataServerCommand.cpp</url>
+          <line>58</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/OpenDataServerCommand.cpp</url>
+          <line>69</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Sim.cpp</url>
+          <line>10</line>
+          <option name="timeStamp" value="47" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Sim.cpp</url>
+          <line>48</line>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
+          <line>18</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
         <watch expression="*str" language="ObjectiveC" />
-        <watch expression="array[index]" language="ObjectiveC" />
-        <watch expression="&amp;str" language="ObjectiveC" />
+        <watch expression="simulatorMap" language="ObjectiveC" />
       </configuration>
     </watches-manager>
   </component>

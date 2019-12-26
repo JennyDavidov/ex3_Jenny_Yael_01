@@ -55,6 +55,7 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
         std::cout << "Client is now connected to server" << std::endl;
     }
     thread clientThread(sendToSimulator, client_socket);
+    clientThread.detach();
     close(client_socket);
     return;
 }
