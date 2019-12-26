@@ -74,6 +74,9 @@ class Variable : public Expression{
     double value;
     int direction;
 public:
+    int getDirection() const;
+
+public:
     void setDirection(int direction);
 
 public:
