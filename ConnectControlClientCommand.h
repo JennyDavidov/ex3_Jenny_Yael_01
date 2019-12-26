@@ -14,6 +14,6 @@ public:
     ConnectControlClientCommand();
     void openClient(string *str, Interpreter *interpreter);
     int execute(string *str, Interpreter* interpreter);
-
+    static void sendToSimulator(int client_socket);
 };
 #endif //EX3_TEST_PROJ_CONNECTCONTROLCLIENTCOMMAND_H

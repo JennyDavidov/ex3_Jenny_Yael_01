@@ -18,6 +18,7 @@
 
 using namespace std;
 
+
 vector<string> lexerFunc(ifstream &file);
 
 void parserFunc(vector<string> array, map<string, Command *>, Interpreter* interpreter);
@@ -196,5 +197,6 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
 
         }
     }
+    parserDone = true;
 }
 

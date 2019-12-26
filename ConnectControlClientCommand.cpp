@@ -54,18 +54,23 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
     } else {
         std::cout << "Client is now connected to server" << std::endl;
     }
-
-    //if here we made a connection
-    const char *set = "set controls/flight/rudder 1\r\n";
-    int is_sent = send(client_socket, set, strlen(set), 0);
-    if (is_sent == -1) {
-        std::cout << "Error sending message" << std::endl;
-    } else {
-        std::cout << "Hello message sent to server" << std::endl;
-    }
-//    char buffer[1024] = {0};
-//    int valread = read( client_socket , buffer, 1024);
-//    std::cout<<buffer<<std::endl;
+    thread clientThread(sendToSimulator, client_socket);
     close(client_socket);
     return;
 }
+
+void ConnectControlClientCommand::sendToSimulator(int client_socket) {
+    while(!parserDone) {
+        if (message != NULL) {
+            const char* command = message;
+            int is_sent = send(client_socket, message, strlen(message), 0);
+            if (is_sent == -1) {
+                std::cout << "Error sending message" << std::endl;
+            } else {
+                std::cout << "Hello message sent to server" << std::endl;
+            }
+            message = NULL;
+        }
+    }
+}
+
