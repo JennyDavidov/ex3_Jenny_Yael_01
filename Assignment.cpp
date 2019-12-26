@@ -41,12 +41,8 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
     path = path.erase(path.length() - 1);
     double valueForSet = flyMap.find(name)->second->getValue();
     string valueSetString = to_string(valueForSet);
-    string message = "set " + path + " " + valueSetString + "\r\n";
-    ssize_t return_val;
-    // Send message to the server
-
-    //returl_val = write(sockfd, message.c_str(), message.length());
-
+    string messageToSet = "set " + path + " " + valueSetString + "\r\n";
+    message = messageToSet.c_str();
 }
 
 Assignment::Assignment() {}
