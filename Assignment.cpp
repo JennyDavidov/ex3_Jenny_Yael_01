@@ -13,8 +13,6 @@ extern map<string, Variable *> flyMap;
 extern string message;
 
 int Assignment::execute(string *str, Interpreter *interpreter) {
-    //skip the "ass"
-    str += 1;
     //if the string contains expression
     //split it into Var name , value
     string name, value;

@@ -15,7 +15,7 @@ int Sim::execute(string *str, Interpreter *interpreter) {
     string key;
     int dir;
     //take the var name from the template var NAME -> sim(ADDRESS)
-    (str) += 1;
+    //(str) += 1;
     //if copying existing varaible to a local variable
     if ((*str).find("=") != string::npos) {
         //separate key name

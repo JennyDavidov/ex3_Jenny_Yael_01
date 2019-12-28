@@ -12,7 +12,7 @@ using namespace std;
 int Sleep::execute(string *str, Interpreter *interpreter) {
     double temp;
     int duration;
-    str+=1;
+   // str+=1;
 //    if ((*str).find_first_of("+-/*") != string::npos) {
 //        Expression *ex = interpreter->interpret(*str);
 //        temp = ex->calculate();

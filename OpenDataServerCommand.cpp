@@ -36,7 +36,7 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     sockaddr_in address; //in means IP4
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY; //give me any IP allocated for my machine
-    str += 1;
+   // str += 1;
     unsigned short port;
     if (str->find_first_of("+-/*") != string::npos) {
         Expression *ex = interpreter->interpret(*str);
