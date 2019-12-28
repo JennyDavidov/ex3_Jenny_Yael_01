@@ -24,8 +24,7 @@ int WhileCommand::execute(string *str, Interpreter *interpreter) {
     str += 1;
     //inserting the commands of the while to a vector
     while ((*str) != "}") {
-        commands.insert(it, 1, (*str));
-        it++;
+        commands.insert(commands.begin(), 1, (*str));
         i++;
         str += 1;
     }
@@ -100,23 +99,23 @@ int WhileCommand::execute(string *str, Interpreter *interpreter) {
 WhileCommand::WhileCommand() {}
 
 void WhileCommand::callingCommand(vector<string> commands, Interpreter *interpreter) {
-    for (int i = 0; i < commands.size(); i++) {
+    for (int i = commands.size()-1; i >= 0; i--) {
         if (commands.at(i) == "Print") {
             Print *print = new Print();
-            print->execute(&commands.at(i+1), interpreter);
-            i++;
+            print->execute(&commands.at(i-1), interpreter);
+            i--;
         } else if (commands.at(i) == "Sleep") {
             Sleep *sleep = new Sleep();
-            sleep->execute(&commands.at(i+1), interpreter);
-            i++;
+            sleep->execute(&commands.at(i-1), interpreter);
+            i--;
         } else if (commands.at(i) == "var") {
             Sim *var = new Sim();
-            var->execute(&commands.at(i+1), interpreter);
-            i++;
+            var->execute(&commands.at(i-1), interpreter);
+            i--;
         } else {
             Assignment *ass = new Assignment();
-            ass->execute(&commands.at(i+1), interpreter);
-            i++;
+            ass->execute(&commands.at(i-1), interpreter);
+            i--;
         }
     }
 }

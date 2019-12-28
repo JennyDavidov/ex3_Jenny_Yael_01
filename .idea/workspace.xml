@@ -13,12 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8d57d452-80b5-477d-b894-9b0ccf133170" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Command.h" beforeDir="false" afterPath="$PROJECT_DIR$/Command.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectControlClientCommand.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ConnectControlClientCommand.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sim.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sleep.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Sleep.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WhileCommand.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/WhileCommand.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Jenny2612_03" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -192,65 +187,21 @@
           <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Assignment.cpp</url>
-          <line>19</line>
-          <option name="timeStamp" value="72" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>202</line>
-          <option name="timeStamp" value="73" />
+          <line>212</line>
+          <option name="timeStamp" value="94" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
-          <line>68</line>
-          <option name="timeStamp" value="85" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Assignment.cpp</url>
-          <line>44</line>
-          <option name="timeStamp" value="86" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
-          <line>70</line>
-          <option name="timeStamp" value="87" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
-          <line>71</line>
-          <option name="timeStamp" value="88" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
-          <line>72</line>
-          <option name="timeStamp" value="89" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
-          <line>73</line>
-          <option name="timeStamp" value="90" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
-          <line>74</line>
-          <option name="timeStamp" value="91" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
-          <line>75</line>
-          <option name="timeStamp" value="92" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/ConnectControlClientCommand.cpp</url>
-          <line>76</line>
-          <option name="timeStamp" value="93" />
+          <url>file://$PROJECT_DIR$/WhileCommand.cpp</url>
+          <line>16</line>
+          <option name="timeStamp" value="97" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="CMakeRunConfiguration">
-        <watch expression="message" language="ObjectiveC" />
+        <watch expression="it" language="ObjectiveC" />
+        <watch expression="*str" language="ObjectiveC" />
       </configuration>
     </watches-manager>
   </component>
