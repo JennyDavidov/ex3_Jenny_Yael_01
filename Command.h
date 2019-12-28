@@ -17,7 +17,7 @@ class Command {
 public:
 
 public:
-    virtual int execute(string &str, Interpreter *interpreter) {};
+    virtual int execute(string *str, Interpreter *interpreter) {};
 
     virtual ~Command() {};
 };

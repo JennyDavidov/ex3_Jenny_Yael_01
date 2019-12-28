@@ -35,6 +35,9 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         Variable* var = new Variable(sim, value);
         var->setDirection(dir);
         flyMap.insert(pair<string, Variable *>(key, reinterpret_cast<Variable *const>(&var)));
+        string value1 = to_string(value);
+        string strToInterpreter = key + "=" + value1;
+        interpreter->setVariables(strToInterpreter);
         return 2;
     }
     //defining variable to flyMap
@@ -52,6 +55,9 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         //Variable *obj = simulatorMap.find(findSim)->second;
         simulatorMap.find(findSim)->second->setDirection(dir);
         flyMap.insert(pair<string, Variable *>(key, simulatorMap.find(findSim)->second));
+        string value = to_string(simulatorMap.find(findSim)->second->getValue());
+        string strToInterpreter = key + "=" + value;
+        interpreter->setVariables(strToInterpreter);
         return 5;
     }
 }
