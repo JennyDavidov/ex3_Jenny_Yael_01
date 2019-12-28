@@ -14,6 +14,8 @@
 #include "xml.h"
 #include "Expression.h"
 #include "interpreter.h"
+#include "WhileCommand.h"
+#include "IfCommand.h"
 #include "Assignment.h"
 
 using namespace std;
@@ -158,17 +160,21 @@ vector<string> lexerFunc(ifstream &file) {
 map<string, Command *> mapCreator() {
     map<string, Command *> commandMap;
     Command *open = new OpenDataServerCommand();
-    Command *connect = new ConnectControlClientCommand;
-    Command *sim = new Sim;
-    Command *sleep = new Sleep;
-    Command *print = new Print;
-    Command *ass = new Assignment;
-    commandMap["openDataServer"] = open;
+    Command *connect = new ConnectControlClientCommand();
+    Command *sim = new Sim();
+    Command *sleep = new Sleep();
+    Command *print = new Print();
+    Command *ass = new Assignment();
+    Command *whileCommand = new WhileCommand();
+    Command *ifCommand = new IfCommand();
+    commandMap.emplace("openDataServer", open);
     commandMap.emplace("connectControlClient", connect);
     commandMap.emplace("var", sim);
     commandMap.emplace("Sleep", sleep);
     commandMap.emplace("Print", print);
     commandMap.emplace("ass", ass);
+    commandMap.emplace("while", whileCommand);
+    commandMap.emplace("if", ifCommand);
 
     return commandMap;
 }
@@ -201,6 +207,14 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             Assignment *ass = dynamic_cast<Assignment *>(c);
             if (ass) {
                 index += ass->execute(&array.at(index), interpreter);
+            }
+            WhileCommand *whileCommand = dynamic_cast<WhileCommand *>(c);
+            if (whileCommand) {
+                index += whileCommand->execute(&array.at(index), interpreter);
+            }
+            IfCommand *ifCommand = dynamic_cast<IfCommand *>(c);
+            if (ifCommand) {
+                index += ifCommand->execute(&array.at(index), interpreter);
             }
 
         }
