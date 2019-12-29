@@ -70,6 +70,7 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
         exit(-1);
     }
     close(socketfd); //closing the listening socket
+    simulatorMapCreate(client_socket);
     thread serverThread(openServer, str, client_socket);
     serverThread.detach();
     return 2;
@@ -86,6 +87,7 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
     string readData;
     string temp;
     while (read(client_socket, buffer, 1024) > 0) {
+        j = 0;
         //convert char array to string
         string s = "";
         for (int i = 0; i < sizeof(buffer); i++) {
@@ -121,9 +123,43 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
             }
         }
     }
-//writing back to client
-//    char *hello = "Hello, I can hear you! \n";
-//    send(client_socket , hello , strlen(hello) , 0 );
-//    std::cout<<"Hello message sent\n"<<std::endl;
+    return;
+}
+
+void OpenDataServerCommand::simulatorMapCreate(int client_socket) {
+//reading from client
+    int j = 0;
+    int n = 0;
+    char buffer[1024];
+    string readData;
+    string temp;
+    if (read(client_socket, buffer, 1024) > 0) {
+        //convert char array to string
+        string s = "";
+        for (int i = 0; i < sizeof(buffer); i++) {
+            s = s + buffer[i];
+        }
+        size_t index = s.find_first_of("\n");
+        readData = (s).substr(0, index);
+        size_t findComma = (readData).find_first_of(",");
+        while ((findComma != string::npos) && (j < 36)) {
+            temp = (readData).substr(0, findComma);
+            readData = readData.substr(findComma + 1);
+            double value = stod(temp);
+            if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
+                simulatorMap.insert(pair<string, Variable *>(xmlDetails[j],new Variable(xmlDetails[j], value)));
+            }
+            findComma = (readData).find_first_of(",");
+            j++;
+            if ((j == 35) && (findComma == string::npos) && (readData != "")) {
+                double value = stod(readData);
+                readData = "";
+                if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
+                    simulatorMap.insert(pair<string, Variable *>(xmlDetails[j],new Variable(xmlDetails[j], value)));
+                }
+                j++;
+            }
+        }
+    }
     return;
 }
