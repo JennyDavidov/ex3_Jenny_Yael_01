@@ -95,6 +95,7 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
         j = 0;
         //convert char array to string
         string s = "";
+        string check;
         for (int i = 0; i < sizeof(buffer); i++) {
             s = s + buffer[i];
         }
@@ -116,8 +117,21 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
                     sBegin = s.substr(0, index);
                     //merging end from previous buffer and begin of this buffer
                     readData = sEnd + sBegin;
+                    sEnd = "";
                     s = s.substr(index + 1);
                 }
+//                check = readData;
+//                int i = 0;
+//                size_t findComma1 = check.find_first_of(",");
+//                while (findComma1 != string::npos) {
+//                    check.replace(check.find(","), 1, "");
+//                    findComma1 = check.find_first_of(",");
+//                    i++;
+//                }
+//                if (i != 35) {
+//                    continue;
+//                    index = s.find_first_of("\n");
+//                }
                 size_t findComma = (readData).find_first_of(",");
                 while ((findComma != string::npos) && (j < 36)) {
                     temp = (readData).substr(0, findComma);
