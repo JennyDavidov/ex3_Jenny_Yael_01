@@ -16,7 +16,7 @@ public:
     OpenDataServerCommand();
 
     int execute(string *str, Interpreter* interpreter);
-
+    void simulatorMapCreate(int client_socket);
 };
 
 #endif //EX3_TEST_PROJ_OPENDATASERVERCOMMAND_H
