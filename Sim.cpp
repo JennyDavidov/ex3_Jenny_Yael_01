@@ -5,10 +5,12 @@
 #include "Sim.h"
 #include "Assignment.h"
 #include <string>
+#include <mutex>
 
 using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
+extern mutex mtx;
 
 int Sim::execute(string *str, Interpreter *interpreter) {
     int index;
@@ -32,7 +34,7 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         string sim = copy->getName();
         double value = copy->getValue();
         //creating new variable
-        Variable* var = new Variable(sim, value);
+        Variable *var = new Variable(sim, value);
         var->setDirection(dir);
         flyMap.insert(pair<string, Variable *>(key, reinterpret_cast<Variable *const>(&var)));
         string value1 = to_string(value);
@@ -40,7 +42,7 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         interpreter->setVariables(strToInterpreter);
         return 2;
     }
-    //defining variable to flyMap
+        //defining variable to flyMap
     else {
         key = (*str);
         (str) += 1;
@@ -53,11 +55,14 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         (str) += 2;
         string findSim = (*str);
         //Variable *obj = simulatorMap.find(findSim)->second;
+        mtx.lock();
         simulatorMap.find(findSim)->second->setDirection(dir);
         flyMap.insert(pair<string, Variable *>(key, simulatorMap.find(findSim)->second));
         string value = to_string(simulatorMap.find(findSim)->second->getValue());
         string strToInterpreter = key + "=" + value;
         interpreter->setVariables(strToInterpreter);
+        mtx.unlock();
+
         return 5;
     }
 }
