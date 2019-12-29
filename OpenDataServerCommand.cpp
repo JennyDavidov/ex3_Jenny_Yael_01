@@ -94,7 +94,9 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
             s = s + buffer[i];
         }
         size_t index = s.find_first_of("\n");
-        readData = (s).substr(0, index);
+        s = s.substr(index);
+        size_t index1 = s.find_first_of("\n");
+        readData = (s).substr(0, index1);
         size_t findComma = (readData).find_first_of(",");
         while ((findComma != string::npos) && (j < 36)) {
             temp = (readData).substr(0, findComma);
@@ -140,7 +142,9 @@ void OpenDataServerCommand::simulatorMapCreate(int client_socket) {
             s = s + buffer[i];
         }
         size_t index = s.find_first_of("\n");
-        readData = (s).substr(0, index);
+        s = s.substr(index+1);
+        size_t index1 = s.find_first_of("\n");
+        readData = (s).substr(0, index1);
         size_t findComma = (readData).find_first_of(",");
         while ((findComma != string::npos) && (j < 36)) {
             temp = (readData).substr(0, findComma);
