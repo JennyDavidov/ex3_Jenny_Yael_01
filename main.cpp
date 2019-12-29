@@ -17,12 +17,14 @@
 #include "WhileCommand.h"
 #include "IfCommand.h"
 #include "Assignment.h"
+#include <mutex>
 
 using namespace std;
 extern string xmlDetails[36];
 map<string, Variable *> simulatorMap;
 map<string, Variable *> flyMap;
 string message;
+mutex mtx;
 
 vector<string> lexerFunc(ifstream &file);
 

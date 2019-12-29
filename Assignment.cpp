@@ -11,6 +11,8 @@ using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
 extern string message;
+string globalName;
+double globalValue;
 
 int Assignment::execute(string *str, Interpreter *interpreter) {
     //if the string contains expression
@@ -34,13 +36,18 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
     } else {
         doubleValue = stod(value);
     }
+    //updating global values
+    globalName = name;
+    globalValue = doubleValue;
     //Update value in fly map
     auto c = flyMap.find(name);
-    c->second->setValue(doubleValue);
+//    c->second->setValue(doubleValue);
     //Prepare set message to simulator
     string path = c->second->getName();
-    double valueForSet = flyMap.find(name)->second->getValue();
-    string valueSetString = to_string(valueForSet);
+    //double valueForSet = flyMap.find(name)->second->getValue();
+    string valueSetString = to_string(doubleValue);
+    string strToInterpreter = name + "=" + valueSetString;
+    interpreter->setVariables(strToInterpreter);
     string messageToSet = "set " + path + " " + valueSetString + "\r\n";
     message = messageToSet;
     return 2;
