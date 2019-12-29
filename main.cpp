@@ -186,35 +186,35 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             auto c = mapCommand.find(array[index])->second;
             OpenDataServerCommand *open = dynamic_cast<OpenDataServerCommand *>(c);
             if (open) {
-                index += open->execute(&array.at(index), interpreter);
+                index += open->execute(&array.at(index+1), interpreter);
             }
             ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
             if (connect) {
-                index += connect->execute(&array.at(index), interpreter);
+                index += connect->execute(&array.at(index+1), interpreter);
             }
             Sleep *sleep = dynamic_cast<Sleep *>(c);
             if (sleep) {
-                index += sleep->execute(&array.at(index), interpreter);
+                index += sleep->execute(&array.at(index+1), interpreter);
             }
             Print *print = dynamic_cast<Print *>(c);
             if (print) {
-                index += print->execute(&array.at(index), interpreter);
+                index += print->execute(&array.at(index+1), interpreter);
             }
             Sim *sim = dynamic_cast<Sim *>(c);
             if (sim) {
-                index += sim->execute(&array.at(index), interpreter);
+                index += sim->execute(&array.at(index+1), interpreter);
             }
             Assignment *ass = dynamic_cast<Assignment *>(c);
             if (ass) {
-                index += ass->execute(&array.at(index), interpreter);
+                index += ass->execute(&array.at(index+1), interpreter);
             }
             WhileCommand *whileCommand = dynamic_cast<WhileCommand *>(c);
             if (whileCommand) {
-                index += whileCommand->execute(&array.at(index), interpreter);
+                index += whileCommand->execute(&array.at(index+1), interpreter);
             }
             IfCommand *ifCommand = dynamic_cast<IfCommand *>(c);
             if (ifCommand) {
-                index += ifCommand->execute(&array.at(index), interpreter);
+                index += ifCommand->execute(&array.at(index+1), interpreter);
             }
 
         }

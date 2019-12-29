@@ -8,15 +8,15 @@
 #include "Print.h"
 #include "Sim.h"
 #include <string>
-
+extern map<string, Variable *> flyMap;
 using namespace std;
 
 
 int WhileCommand::execute(string *str, Interpreter *interpreter) {
     vector<string> commands;
     vector<string>::iterator it;
-    it = commands.begin();
-    str += 1;
+    //it = commands.begin();
+   // str += 1;
     int i = 0;
     //keeping condition of while
     (*str).replace((*str).find("{"), 1, "");
@@ -39,16 +39,16 @@ int WhileCommand::execute(string *str, Interpreter *interpreter) {
     Expression *left, *right;
     if (findEqual != string::npos) {
         //finding the condition of the while
-        if (reinterpret_cast<const char *>(condition[findEqual]) == "!") {
+        if ((condition[findEqual]) == '!') {
             cond = "!=";
-        } else if (reinterpret_cast<const char *>(condition[findEqual]) == "<") {
-            if (reinterpret_cast<const char *>(condition[findEqual + 1]) == "=") {
+        } else if ((condition[findEqual]) == '<') {
+            if ((condition[findEqual + 1]) == '=') {
                 cond = "<=";
             } else {
                 cond = "<";
             }
-        } else if (reinterpret_cast<const char *>(condition[findEqual]) == ">") {
-            if (reinterpret_cast<const char *>(condition[findEqual + 1]) == "=") {
+        } else if ((condition[findEqual]) == '>') {
+            if ((condition[findEqual + 1]) == '=') {
                 cond = ">=";
             } else {
                 cond = ">";
@@ -58,37 +58,105 @@ int WhileCommand::execute(string *str, Interpreter *interpreter) {
         }
         //dividing the expression to left and right
         name = (condition).substr(0, findEqual);
-        left = interpreter->interpret(name);
+        if (name.find_first_of("+-/*") != string::npos) {
+            left = interpreter->interpret(name);
+        } else {
+            left = new Value(flyMap.find(name)->second->getValue());
+        }
         if (cond.length() == 2) {
             value = (condition).substr(findEqual + 2);
         } else {
             value = (condition).substr(findEqual + 1);
         }
-        right = interpreter->interpret(value);
+        if (value.find_first_of("+-/*") != string::npos) {
+            right = interpreter->interpret(value);
+        } else {
+            right = new Value(stod(value));
+        }
         //making the while loop
         if (cond == "!=") {
             while (left->calculate() != right->calculate()) {
                 callingCommand(commands, interpreter);
+                if (name.find_first_of("+-/*") != string::npos) {
+                    left = interpreter->interpret(name);
+                } else {
+                    left = new Value(flyMap.find(name)->second->getValue());
+                }
+                if (value.find_first_of("+-/*") != string::npos) {
+                    right = interpreter->interpret(value);
+                } else {
+                    right = new Value(stod(value));
+                }
             }
         } else if (cond == "<=") {
             while (left->calculate() <= right->calculate()) {
                 callingCommand(commands, interpreter);
+                if (name.find_first_of("+-/*") != string::npos) {
+                    left = interpreter->interpret(name);
+                } else {
+                    left = new Value(flyMap.find(name)->second->getValue());
+                }
+                if (value.find_first_of("+-/*") != string::npos) {
+                    right = interpreter->interpret(value);
+                } else {
+                    right = new Value(stod(value));
+                }
             }
         } else if (cond == "<") {
             while (left->calculate() < right->calculate()) {
                 callingCommand(commands, interpreter);
+                if (name.find_first_of("+-/*") != string::npos) {
+                    left = interpreter->interpret(name);
+                } else {
+                    left = new Value(flyMap.find(name)->second->getValue());
+                }
+                if (value.find_first_of("+-/*") != string::npos) {
+                    right = interpreter->interpret(value);
+                } else {
+                    right = new Value(stod(value));
+                }
             }
         } else if (cond == ">=") {
             while (left->calculate() >= right->calculate()) {
                 callingCommand(commands, interpreter);
+                if (name.find_first_of("+-/*") != string::npos) {
+                    left = interpreter->interpret(name);
+                } else {
+                    left = new Value(flyMap.find(name)->second->getValue());
+                }
+                if (value.find_first_of("+-/*") != string::npos) {
+                    right = interpreter->interpret(value);
+                } else {
+                    right = new Value(stod(value));
+                }
             }
         } else if (cond == ">") {
             while (left->calculate() > right->calculate()) {
                 callingCommand(commands, interpreter);
+                if (name.find_first_of("+-/*") != string::npos) {
+                    left = interpreter->interpret(name);
+                } else {
+                    left = new Value(flyMap.find(name)->second->getValue());
+                }
+                if (value.find_first_of("+-/*") != string::npos) {
+                    right = interpreter->interpret(value);
+                } else {
+                    right = new Value(stod(value));
+                }
             }
         } else if (cond == "==") {
             while (left->calculate() == right->calculate()) {
                 callingCommand(commands, interpreter);
+                if (name.find_first_of("+-/*") != string::npos) {
+                    left = interpreter->interpret(name);
+                } else {
+                    left = new Value(flyMap.find(name)->second->getValue());
+                }
+                if (value.find_first_of("+-/*") != string::npos) {
+                    right = interpreter->interpret(value);
+                } else {
+                    right = new Value(stod(value));
+                }
             }
         }
 

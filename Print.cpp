@@ -12,7 +12,7 @@ extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
 
 int Print::execute(string *str, Interpreter *interpreter) {
-    str += 1;
+   // str += 1;
     string s = *str;
     if (s.find("\"") != string::npos) {
         s.erase(0, 1);
