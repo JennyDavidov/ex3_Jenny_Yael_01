@@ -39,7 +39,7 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
 
     sockaddr_in address;
     address.sin_family = AF_INET;
-   // str += 1;
+    // str += 1;
     (*str).erase((*str).length() - 1);
     (*str).erase(0, 1);
     address.sin_addr.s_addr = inet_addr(reinterpret_cast<const char *>((*str).c_str()));
@@ -70,12 +70,11 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
 void ConnectControlClientCommand::sendToSimulator(int client_socket) {
     while (!parserDone) {
         if (message != "") {
-            const char * c = message.c_str();
+            const char *c = message.c_str();
             auto obj = flyMap.find(globalName);
-            if (mtx.try_lock()) {
-                obj->second->setValue(globalValue);
-                mtx.unlock();
-            }
+            mtx.lock();
+            obj->second->setValue(globalValue);
+            mtx.unlock();
             int is_sent = send(client_socket, c, strlen(c), 0);
             if (is_sent == -1) {
                 std::cout << "Error sending message" << std::endl;
