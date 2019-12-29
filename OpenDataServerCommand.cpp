@@ -15,12 +15,14 @@
 #include "xml.h"
 #include "Expression.h"
 #include "interpreter.h"
+#include <mutex>
 
 
 using namespace std;
 extern string xmlDetails[36];
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
+extern mutex mtx;
 
 int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     //create socket
@@ -36,7 +38,7 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     sockaddr_in address; //in means IP4
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY; //give me any IP allocated for my machine
-   // str += 1;
+    // str += 1;
     unsigned short port;
     if (str->find_first_of("+-/*") != string::npos) {
         Expression *ex = interpreter->interpret(*str);
@@ -86,43 +88,73 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
     char buffer[1024];
     string readData;
     string temp;
+    bool firstValues;
+    string sBegin = "", sEnd = "";
     while (read(client_socket, buffer, 1024) > 0) {
+        firstValues = true;
         j = 0;
         //convert char array to string
         string s = "";
         for (int i = 0; i < sizeof(buffer); i++) {
             s = s + buffer[i];
         }
-        size_t index = s.find_first_of("\n");
-        s = s.substr(index);
-        size_t index1 = s.find_first_of("\n");
-        readData = (s).substr(0, index1);
-        size_t findComma = (readData).find_first_of(",");
-        while ((findComma != string::npos) && (j < 36)) {
-            temp = (readData).substr(0, findComma);
-            readData = readData.substr(findComma + 1);
-            double value = stod(temp);
-            if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
-                //Variable *obj = new Variable(xmlDetails[j], value);
-                //simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], reinterpret_cast<Variable *const>(&obj)));
-                simulatorMap.insert(pair<string, Variable *>(xmlDetails[j],new Variable(xmlDetails[j], value)));
-            } else {
-                simulatorMap.find(xmlDetails[j])->second->setValue(value);
-            }
-            findComma = (readData).find_first_of(",");
-            j++;
-            if ((j == 35) && (findComma == string::npos) && (readData != "")) {
-                double value = stod(readData);
-                readData = "";
-                if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
-                    //Variable *obj = new Variable(xmlDetails[j], value);
-                    //simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], reinterpret_cast<Variable *const>(&obj)));
-                    simulatorMap.insert(pair<string, Variable *>(xmlDetails[j],new Variable(xmlDetails[j], value)));
+        while (s.length() > 0) {
+            size_t index = s.find_first_of("\n");
+            while (index != string::npos) {
+                //no previous buffer
+                if (sEnd.length() == 0) {
+                    if (firstValues) {
+                        //throwing values until /n
+                        s = s.substr(index + 1);
+                        firstValues = false;
+                    }
+                    size_t index1 = s.find_first_of("\n");
+                    //string from /n to /n
+                    readData = (s).substr(0, index1);
+                    s = s.substr(index1 + 1);
                 } else {
-                    simulatorMap.find(xmlDetails[j])->second->setValue(value);
+                    sBegin = s.substr(0, index);
+                    //merging end from previous buffer and begin of this buffer
+                    readData = sEnd + sBegin;
+                    s = s.substr(index + 1);
                 }
-                j++;
+                size_t findComma = (readData).find_first_of(",");
+                while ((findComma != string::npos) && (j < 36)) {
+                    temp = (readData).substr(0, findComma);
+                    readData = readData.substr(findComma + 1);
+                    double value = stod(temp);
+                    if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
+                        simulatorMap.insert(
+                                pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], value)));
+                    } else {
+                        if (mtx.try_lock()) {
+                            simulatorMap.find(xmlDetails[j])->second->setValue(value);
+                            mtx.unlock();
+                        }
+
+                    }
+                    findComma = (readData).find_first_of(",");
+                    j++;
+                    if ((j == 35) && (findComma == string::npos) && (readData != "")) {
+                        double value = stod(readData);
+                        readData = "";
+                        if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
+                            simulatorMap.insert(
+                                    pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], value)));
+                        } else {
+                            if (mtx.try_lock()) {
+                                simulatorMap.find(xmlDetails[j])->second->setValue(value);
+                                mtx.unlock();
+                            }
+                        }
+                        j++;
+                    }
+                }
+                index = s.find_first_of("\n");
             }
+            //what remains in s
+            sEnd = s;
+            s = "";
         }
     }
     return;
@@ -142,7 +174,7 @@ void OpenDataServerCommand::simulatorMapCreate(int client_socket) {
             s = s + buffer[i];
         }
         size_t index = s.find_first_of("\n");
-        s = s.substr(index+1);
+        s = s.substr(index + 1);
         size_t index1 = s.find_first_of("\n");
         readData = (s).substr(0, index1);
         size_t findComma = (readData).find_first_of(",");
@@ -151,7 +183,7 @@ void OpenDataServerCommand::simulatorMapCreate(int client_socket) {
             readData = readData.substr(findComma + 1);
             double value = stod(temp);
             if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
-                simulatorMap.insert(pair<string, Variable *>(xmlDetails[j],new Variable(xmlDetails[j], value)));
+                simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], value)));
             }
             findComma = (readData).find_first_of(",");
             j++;
@@ -159,7 +191,7 @@ void OpenDataServerCommand::simulatorMapCreate(int client_socket) {
                 double value = stod(readData);
                 readData = "";
                 if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
-                    simulatorMap.insert(pair<string, Variable *>(xmlDetails[j],new Variable(xmlDetails[j], value)));
+                    simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], value)));
                 }
                 j++;
             }

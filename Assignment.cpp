@@ -6,11 +6,13 @@
 #include "Sleep.h"
 #include <string>
 #include <cstring>
+#include <mutex>
 
 using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
 extern string message;
+extern mutex mtx;
 
 int Assignment::execute(string *str, Interpreter *interpreter) {
     //if the string contains expression
@@ -36,7 +38,10 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
     }
     //Update value in fly map
     auto c = flyMap.find(name);
-    c->second->setValue(doubleValue);
+    if (mtx.try_lock()) {
+        c->second->setValue(doubleValue);
+        mtx.unlock();
+    }
     //Prepare set message to simulator
     string path = c->second->getName();
     double valueForSet = flyMap.find(name)->second->getValue();

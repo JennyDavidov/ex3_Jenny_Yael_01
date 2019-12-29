@@ -11,11 +11,13 @@
 #include <thread>
 #include <arpa/inet.h>
 #include <cstring>
+#include <mutex>
 
 using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
 extern string message;
+extern mutex mtx;
 
 
 int ConnectControlClientCommand::execute(string *str, Interpreter *interpreter) {
