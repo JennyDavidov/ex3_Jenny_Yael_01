@@ -175,6 +175,7 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                                 c->setValue(value);
                                 mtx.unlock();
                             }
+                            cout << "rpm value" + to_string(value) << endl;
                             map<string, Variable*>::iterator it;
                             string key = "";
                             for (it = flyMap.begin(); it != flyMap.end(); ++it) {
