@@ -246,65 +246,27 @@ Expression *Interpreter::interpret(string string1) {
         }
     }
 //when we finish to read the string and there are still operators in stack
-    while (!operators.
-
-            empty()
-
-            ) {
-        if (operators.
-
-                top()
-
-            == "(") {
+    while (!operators.empty()) {
+        if (operators.top() == "(") {
             throw "Exception, wrong infix expression, num of paren isn't equal";
         }
-        output.
-                push(operators
-                             .
-
-                                     top()
-
-        );
-        operators.
-
-                pop();
-
+        output.push(operators.top());
+        operators.pop();
     }
 //postfix to expression
-    while (!output.
-
-            empty()
-
-            ) {
+    while (!output.empty()) {
 //if it's a number, push it to the numbers stack
-        if (
-                isdigit(output
-                                .
-
-                                        front()[0]
-
-                )) {
-            numbers.
-                    push(stod(output.front())
-            );
-            output.
-
-                    pop();
-
+        if (isdigit(output.front()[0])) {
+            numbers.push(stod(output.front()));
+            output.pop();
         }
-//if it's an operator, make the relevant expression
+        //if it's an operator, make the relevant expression
         else {
-//UPlus expression
-            if (output.
-
-                    front()
-
-                == "'+'") {
+            //UPlus expression
+            if (output.front() == "'+'") {
                 if (exp == nullptr) {
                     exp = new UPlus(new Value(numbers.top()));
-                    numbers.
-
-                            pop();
+                    numbers.pop();
 
                 } else {
                     if (ex1 != nullptr) {
@@ -314,22 +276,13 @@ Expression *Interpreter::interpret(string string1) {
                         exp = new UPlus(exp);
                     }
                 }
-                output.
-
-                        pop();
+                output.pop();
 
             } //UMinus expression
-            else if (output.
-
-                    front()
-
-                     == "'-'") {
+            else if (output.front() == "'-'") {
                 if (exp == nullptr) {
                     exp = new UMinus(new Value(numbers.top()));
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                 } else {
                     if (ex1 != nullptr) {
                         exp = new UMinus(ex1);
@@ -338,27 +291,15 @@ Expression *Interpreter::interpret(string string1) {
                         exp = new UMinus(exp);
                     }
                 }
-                output.
-
-                        pop();
+                output.pop();
 
             } //Plus binary expression
-            else if (output.
-
-                    front()
-
-                     == "+") {
+            else if (output.front() == "+") {
                 if (exp == nullptr) {
                     double num1 = numbers.top();
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                     double num2 = numbers.top();
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                     exp = new Plus(new Value(num2), new Value(num1));
                 } else {
                     if (ex1 != nullptr) {
@@ -366,34 +307,19 @@ Expression *Interpreter::interpret(string string1) {
                         ex1 = nullptr;
                     } else {
                         double num = numbers.top();
-                        numbers.
-
-                                pop();
-
+                        numbers.pop();
                         exp = new Plus(new Value(num), exp);
                     }
                 }
-                output.
-
-                        pop();
+                output.pop();
 
             } //Minus binary expression
-            else if (output.
-
-                    front()
-
-                     == "-") {
+            else if (output.front() == "-") {
                 if (exp == nullptr) {
                     double num1 = numbers.top();
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                     double num2 = numbers.top();
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                     exp = new Minus(new Value(num2), new Value(num1));
                 } else {
                     if (ex1 != nullptr) {
@@ -401,34 +327,19 @@ Expression *Interpreter::interpret(string string1) {
                         ex1 = nullptr;
                     } else {
                         double num = numbers.top();
-                        numbers.
-
-                                pop();
-
+                        numbers.pop();
                         exp = new Minus(exp, new Value(num));
                     }
                 }
-                output.
-
-                        pop();
+                output.pop();
 
             } //Mult binary expression
-            else if (output.
-
-                    front()
-
-                     == "*") {
+            else if (output.front() == "*") {
                 if (exp == nullptr) {
                     double num1 = numbers.top();
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                     double num2 = numbers.top();
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                     exp = new Mul(new Value(num2), new Value(num1));
                 } else {
                     if (ex1 != nullptr) {
@@ -436,34 +347,19 @@ Expression *Interpreter::interpret(string string1) {
                         ex1 = nullptr;
                     } else {
                         double num = numbers.top();
-                        numbers.
-
-                                pop();
-
+                        numbers.pop();
                         exp = new Mul(new Value(num), exp);
                     }
                 }
-                output.
-
-                        pop();
+                output.pop();
 
             } //Div binary expression
-            else if (output.
-
-                    front()
-
-                     == "/") {
+            else if (output.front() == "/") {
                 if (exp == nullptr) {
                     double num1 = numbers.top();
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                     double num2 = numbers.top();
-                    numbers.
-
-                            pop();
-
+                    numbers.pop();
                     exp = new Div(new Value(num2), new Value(num1));
                 } else {
                     if (ex1 != nullptr) {
@@ -471,33 +367,20 @@ Expression *Interpreter::interpret(string string1) {
                         ex1 = nullptr;
                     } else {
                         double num = numbers.top();
-                        numbers.
-
-                                pop();
-
+                        numbers.pop();
                         exp = new Div(exp, new Value(num));
                     }
                 }
-                output.
-
-                        pop();
+                output.pop();
 
             } //inner expression
-            else if (output.
-
-                    front()
-
-                     == ":") {
-                output.
-
-                        pop();
-
+            else if (output.front() == ":") {
+                output.pop();
                 ex1 = anotherExp(output, numbers, ex1);
             }
         }
     }
-    return
-            exp;
+    return exp;
 }
 
 bool Interpreter::isEqualOp(stack<string> s, char op) {
