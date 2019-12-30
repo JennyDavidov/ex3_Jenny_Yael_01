@@ -189,10 +189,12 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             OpenDataServerCommand *open = dynamic_cast<OpenDataServerCommand *>(c);
             if (open) {
                 index += open->execute(&array.at(index+1), interpreter);
+                cout << "open done" << endl;
             }
             ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
             if (connect) {
                 index += connect->execute(&array.at(index+1), interpreter);
+                cout << "client done" << endl;
             }
             Sleep *sleep = dynamic_cast<Sleep *>(c);
             if (sleep) {
@@ -205,6 +207,7 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             Sim *sim = dynamic_cast<Sim *>(c);
             if (sim) {
                 index += sim->execute(&array.at(index+1), interpreter);
+                cout << "var done" << endl;
             }
             Assignment *ass = dynamic_cast<Assignment *>(c);
             if (ass) {

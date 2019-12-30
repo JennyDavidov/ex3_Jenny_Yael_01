@@ -85,9 +85,9 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
     //reading from client
     int j = 0;
     int n = 0;
-    char buffer[1024];
-    string readData;
-    string temp;
+    char buffer[1024] = "";
+    string readData = "";
+    string temp = "";
     bool firstValues;
     string sBegin = "", sEnd = "";
     while (read(client_socket, buffer, 1024) > 0) {
@@ -97,6 +97,9 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
         string s = "";
         string check;
         for (int i = 0; i < sizeof(buffer); i++) {
+            if (buffer[i] == '\0') {
+                break;
+            }
             s = s + buffer[i];
         }
         while (s.length() > 0) {
@@ -114,6 +117,9 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
                     readData = (s).substr(0, index1);
                     s = s.substr(index1 + 1);
                 } else {
+                    if (firstValues) {
+                        firstValues = false;
+                    }
                     sBegin = s.substr(0, index);
                     //merging end from previous buffer and begin of this buffer
                     readData = sEnd + sBegin;
@@ -132,6 +138,12 @@ void OpenDataServerCommand::openServer(string *str, int client_socket) {
 //                    continue;
 //                    index = s.find_first_of("\n");
 //                }
+                if (readData[0] == ',') {
+                    readData.erase(0,1);
+                }
+                if (readData[readData.length() - 1] == ',') {
+                    readData.erase(readData.length()-1, 1);
+                }
                 size_t findComma = (readData).find_first_of(",");
                 while ((findComma != string::npos) && (j < 36)) {
                     temp = (readData).substr(0, findComma);
@@ -178,19 +190,22 @@ void OpenDataServerCommand::simulatorMapCreate(int client_socket) {
 //reading from client
     int j = 0;
     int n = 0;
-    char buffer[1024];
-    string readData;
-    string temp;
+    char buffer[1024] = "";
+    string readData = "";
+    string temp = "";
     if (read(client_socket, buffer, 1024) > 0) {
         //convert char array to string
         string s = "";
         for (int i = 0; i < sizeof(buffer); i++) {
+            if (buffer[i] == '\0') {
+                break;
+            }
             s = s + buffer[i];
         }
         size_t index = s.find_first_of("\n");
-        s = s.substr(index + 1);
-        size_t index1 = s.find_first_of("\n");
-        readData = (s).substr(0, index1);
+        //s = s.substr(index + 1);
+        //size_t index1 = s.find_first_of("\n");
+        readData = (s).substr(0, index);
         size_t findComma = (readData).find_first_of(",");
         while ((findComma != string::npos) && (j < 36)) {
             temp = (readData).substr(0, findComma);
