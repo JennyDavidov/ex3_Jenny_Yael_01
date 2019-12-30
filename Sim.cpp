@@ -5,7 +5,8 @@
 #include "Sim.h"
 #include "Assignment.h"
 #include <string>
-#include <mutex>
+#include <iostream>
+
 
 using namespace std;
 extern map<string, Variable *> simulatorMap;
@@ -16,6 +17,7 @@ int Sim::execute(string *str, Interpreter *interpreter) {
     int index;
     string key;
     int dir;
+    cout << "sim" + (*str) << endl;
     //take the var name from the template var NAME -> sim(ADDRESS)
     //(str) += 1;
     //if copying existing varaible to a local variable
@@ -54,14 +56,11 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         }
         (str) += 2;
         string findSim = (*str);
-        //Variable *obj = simulatorMap.find(findSim)->second;
-        mtx.lock();
         simulatorMap.find(findSim)->second->setDirection(dir);
         flyMap.insert(pair<string, Variable *>(key, simulatorMap.find(findSim)->second));
         string value = to_string(simulatorMap.find(findSim)->second->getValue());
         string strToInterpreter = key + "=" + value;
         interpreter->setVariables(strToInterpreter);
-        mtx.unlock();
 
         return 5;
     }

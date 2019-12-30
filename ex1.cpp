@@ -113,6 +113,7 @@ Variable::Variable(string _name, double _value) {
 //    } else {
         this->sim = std::move(_name);
         this->value = _value;
+        this->direction = -1;
   //  }
 }
 Variable::~Variable() {
@@ -184,9 +185,9 @@ double Value::calculate() {
 }
 
 void Variable::setDirection(int direction) {
-    Variable::direction = direction;
+    this->direction = direction;
 }
 
 int Variable::getDirection() const {
-    return direction;
+    return this->direction;
 }

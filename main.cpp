@@ -18,13 +18,13 @@
 #include "IfCommand.h"
 #include "Assignment.h"
 #include <mutex>
+#include <queue>
 
 using namespace std;
 extern string xmlDetails[36];
 map<string, Variable *> simulatorMap;
 map<string, Variable *> flyMap;
-string message;
-mutex mtx;
+queue<string> messagesQueue;
 
 vector<string> lexerFunc(ifstream &file);
 
@@ -95,6 +95,9 @@ vector<string> lexerFunc(ifstream &file) {
                 index = buffer.find("<-");
             }
             if (index == string::npos) {
+                if (buffer.find("\t") != string::npos) {
+                    buffer.replace(buffer.find("\t"), 1, "");
+                }
                 array.push_back(buffer);
             } else {
                 //insert name variable
@@ -136,6 +139,9 @@ vector<string> lexerFunc(ifstream &file) {
                 buffer = buffer.substr(3);
                 array.push_back(buffer);
             } else if (buffer.find(" = ") != string::npos) {
+                if (buffer.find("\t") != string::npos) {
+                    buffer.replace(buffer.find("\t"), 1, "");
+                }
                 array.push_back("ass");
                 array.push_back(buffer);
             } else if (buffer.find('}') != string::npos) {
