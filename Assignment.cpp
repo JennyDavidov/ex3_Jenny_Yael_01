@@ -11,7 +11,7 @@
 using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
-extern string message;
+extern queue<string> messagesQueue;
 extern mutex mtx;
 
 int Assignment::execute(string *str, Interpreter *interpreter) {
@@ -31,7 +31,7 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
         value = (*str).substr(findEqual + 1);
     }
     if (value.find_first_of("+-/*") != string::npos) {
-        Expression *ex = interpreter->interpret(*str);
+        Expression *ex = interpreter->interpret(value);
         doubleValue = ex->calculate();
     } else {
         doubleValue = stod(value);
@@ -42,12 +42,15 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
         c->second->setValue(doubleValue);
         mtx.unlock();
     }
-    //Prepare set message to simulator
-    string path = c->second->getName();
     double valueForSet = flyMap.find(name)->second->getValue();
     string valueSetString = to_string(valueForSet);
+    //updating the variables map of interpreter
+    string strToInterpreter = name + "=" + valueSetString;
+    interpreter->setVariables(strToInterpreter);
+    //Prepare set message to simulator
+    string path = c->second->getName();
     string messageToSet = "set " + path + " " + valueSetString + "\r\n";
-    message = messageToSet;
+    messagesQueue.push(messageToSet);
     return 2;
 }
 

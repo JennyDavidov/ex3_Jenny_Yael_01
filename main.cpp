@@ -18,12 +18,13 @@
 #include "IfCommand.h"
 #include "Assignment.h"
 #include <mutex>
+#include <queue>
 
 using namespace std;
 extern string xmlDetails[36];
 map<string, Variable *> simulatorMap;
 map<string, Variable *> flyMap;
-string message;
+queue<string> messagesQueue;
 mutex mtx;
 
 vector<string> lexerFunc(ifstream &file);
@@ -95,6 +96,9 @@ vector<string> lexerFunc(ifstream &file) {
                 index = buffer.find("<-");
             }
             if (index == string::npos) {
+                if (buffer.find("\t") != string::npos) {
+                    buffer.replace(buffer.find("\t"), 1, "");
+                }
                 array.push_back(buffer);
             } else {
                 //insert name variable
@@ -136,6 +140,9 @@ vector<string> lexerFunc(ifstream &file) {
                 buffer = buffer.substr(3);
                 array.push_back(buffer);
             } else if (buffer.find(" = ") != string::npos) {
+                if (buffer.find("\t") != string::npos) {
+                    buffer.replace(buffer.find("\t"), 1, "");
+                }
                 array.push_back("ass");
                 array.push_back(buffer);
             } else if (buffer.find('}') != string::npos) {
@@ -189,12 +196,10 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             OpenDataServerCommand *open = dynamic_cast<OpenDataServerCommand *>(c);
             if (open) {
                 index += open->execute(&array.at(index+1), interpreter);
-                cout << "open done" << endl;
             }
             ConnectControlClientCommand *connect = dynamic_cast<ConnectControlClientCommand *>(c);
             if (connect) {
                 index += connect->execute(&array.at(index+1), interpreter);
-                cout << "client done" << endl;
             }
             Sleep *sleep = dynamic_cast<Sleep *>(c);
             if (sleep) {
@@ -207,7 +212,6 @@ void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpr
             Sim *sim = dynamic_cast<Sim *>(c);
             if (sim) {
                 index += sim->execute(&array.at(index+1), interpreter);
-                cout << "var done" << endl;
             }
             Assignment *ass = dynamic_cast<Assignment *>(c);
             if (ass) {

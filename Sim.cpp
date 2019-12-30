@@ -54,10 +54,7 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         }
         (str) += 2;
         string findSim = (*str);
-        //Variable *obj = simulatorMap.find(findSim)->second;
-        cout << "before dir" << endl;
         simulatorMap.find(findSim)->second->setDirection(dir);
-        cout << to_string(dir) + "succeed" << endl;
         flyMap.insert(pair<string, Variable *>(key, simulatorMap.find(findSim)->second));
         string value = to_string(simulatorMap.find(findSim)->second->getValue());
         string strToInterpreter = key + "=" + value;

@@ -16,7 +16,7 @@
 using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
-extern string message;
+extern queue<string> messagesQueue;
 extern mutex mtx;
 
 
@@ -67,16 +67,16 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
 
 void ConnectControlClientCommand::sendToSimulator(int client_socket) {
     while (!parserDone) {
-        if (message != "") {
-            const char * c = message.c_str();
+       while (!messagesQueue.empty()) {
+            const char * c = messagesQueue.front().c_str();
             //message = message.c_str();
             int is_sent = send(client_socket, c, strlen(c), 0);
             if (is_sent == -1) {
                 std::cout << "Error sending message" << std::endl;
             } else {
-                std::cout << message + "sent to server" << std::endl;
+                std::cout << messagesQueue.front() + "sent to server" << std::endl;
             }
-            message = "";
+            messagesQueue.pop();
         }
     }
 }

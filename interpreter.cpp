@@ -24,60 +24,59 @@ void Interpreter::setVariables(string str) {
         if (endOfNum == string::npos) {
             endOfNum = (str.size() - p);
         }
-        string variable = str.substr(p,endOfNum);
+        string variable = str.substr(p, endOfNum);
         //separating between name and value
         size_t endOfNum1 = variable.find_first_of('=');
         if (endOfNum1 == string::npos) {
             throw "Exception, wrong string in set variables";
         }
         //name of variable
-        string name = variable.substr(0,endOfNum1);
+        string name = variable.substr(0, endOfNum1);
         //check if it's an illegal name
 //        if (!Variable::checkName(name)) {
 //            throw "Exception, wrong variable name";
 //        } else {
-            //value of variable
-            string value = variable.substr(endOfNum1 + 1, (variable.size() - endOfNum1 - 1));
-            for (unsigned j = 0; j < value.size(); j++) {
-                //check if it's an illegal value
-                if (!isdigit(value[j])) {
-                    if (value[j] == '-') {
-                        if ((isdigit(value[j+1])) && (j != (value.size() -1))) {
-                            continue;
-                        }
-                    }
-                    if (value[j] == '.') {
-                        if ((isdigit(value[j-1])) && (isdigit(value[j+1])) && (j != 0) && (j != (value.size() -1))) {
-                            continue;
-                        }
-                    }
-                    throw "Exception, not a number assigned to variable";
-                }
-            }
-            if (!variables.empty()) {
-                for (it = variables.begin(); it != variables.end(); ++it) {
-                    //updating variable value
-                    if (variables.find(name) != variables.end()) {
-                        (*it).second = value;
-                        break;
-                    } else {
-                        //creating variables
-                        variables.insert(pair<string, string>(name, value));
-                        break;
+        //value of variable
+        string value = variable.substr(endOfNum1 + 1, (variable.size() - endOfNum1 - 1));
+        for (unsigned j = 0; j < value.size(); j++) {
+            //check if it's an illegal value
+            if (!isdigit(value[j])) {
+                if (value[j] == '-') {
+                    if ((isdigit(value[j + 1])) && (j != (value.size() - 1))) {
+                        continue;
                     }
                 }
+                if (value[j] == '.') {
+                    if ((isdigit(value[j - 1])) && (isdigit(value[j + 1])) && (j != 0) && (j != (value.size() - 1))) {
+                        continue;
+                    }
+                }
+                throw "Exception, not a number assigned to variable";
             }
-            else {
-                //first variable
-                variables.insert(pair<string, string>(name, value));
+        }
+        if (!variables.empty()) {
+            for (it = variables.begin(); it != variables.end(); ++it) {
+                //updating variable value
+                if (variables.find(name) != variables.end()) {
+                    (*it).second = value;
+                    break;
+                } else {
+                    //creating variables
+                    variables.insert(pair<string, string>(name, value));
+                    break;
+                }
             }
+        } else {
+            //first variable
+            variables.insert(pair<string, string>(name, value));
+        }
         //}
         p = p + (endOfNum + 1);
     }
 }
 
 Expression *Interpreter::interpret(string string1) {
-    map<::string, ::string> ::iterator it1;
+    map<::string, ::string>::iterator it1;
     queue<::string> output;
     stack<::string> operators;
     stack<double> numbers;
@@ -93,11 +92,11 @@ Expression *Interpreter::interpret(string string1) {
             if (endOfNum == string::npos) {
                 endOfNum = (string1.size() - i);
             }
-            string number = string1.substr(i,endOfNum);
+            string number = string1.substr(i, endOfNum);
             if (isdigit(string1[i])) {
                 output.push(number);
             }
-            //find the value of the variable
+                //find the value of the variable
             else {
                 it1 = variables.find(number);
                 if (it1 != variables.end()) {
@@ -107,38 +106,57 @@ Expression *Interpreter::interpret(string string1) {
                     } else {
                         output.push((*it1).second);
                     }
-                }
-                else {
+                } else {
                     throw "Exception, variable doesn't exist in this interpreter";
                 }
             }
             i += endOfNum;
         }
-        //if it's operator
-        else if ((string1[i] == '+') ||(string1[i] == '-') || (string1[i] == '*') || (string1[i] == '/')) {
+            //if it's operator
+        else if ((string1[i] == '+') || (string1[i] == '-') || (string1[i] == '*') || (string1[i] == '/')) {
             //checking illegal math expression
-            if ((i != 0) && ((string1[i - 1] == '+') ||(string1[i - 1] == '-') || (string1[i - 1] == '*') || (string1[i - 1] == '/'))) {
+            if ((i != 0) && ((string1[i - 1] == '+') || (string1[i - 1] == '-') || (string1[i - 1] == '*') ||
+                             (string1[i - 1] == '/'))) {
                 throw "Exception, wrong infix expression, operator next to another";
             }
             //if it's an operator with priority
-            while(((isEqualOp(operators, string1[i])) || (isHighOp(operators, string1[i]))) && ((operators.top() != "("))) {
+            while (((isEqualOp(operators, string1[i])) || (isHighOp(operators, string1[i]))) &&
+                   ((operators.top() != "("))) {
                 string c = operators.top();
                 operators.pop();
                 output.push(c);
             }
             //if there is a negative number in the expression
-            if ((string1[i] == '-') && (isdigit(string1[i+1]) && ((i+1) < string1.size()))
-            && (i != 0) && (!isdigit(string1[i-1])) && (!isalpha(string1[i-1]))) {
+            if ((string1[i] == '-') && ((isdigit(string1[i + 1])) && ((i + 1) < string1.size()))
+                && (i != 0) && (!isdigit(string1[i - 1])) && (!isalpha(string1[i - 1]))) {
                 if ((!operators.empty()) && (operators.top() == ":")) {
                     operators.pop();
                     operators.push("'-'");
                     operators.push(":");
-                }
-                else {
+                } else {
                     operators.push("'-'");
                 }
             }
-            else {
+                //if it's negative variable
+            else if ((string1[i] == '-') && ((isalpha(string1[i + 1])) && ((i + 1) < string1.size()))) {
+                if (i == 0) {
+                    if ((!operators.empty()) && (operators.top() == ":")) {
+                        operators.pop();
+                        operators.push("'-'");
+                        operators.push(":");
+                    } else {
+                        operators.push("'-'");
+                    }
+                } else if ((!isdigit(string1[i - 1])) && (!isalpha(string1[i - 1]))) {
+                    if ((!operators.empty()) && (operators.top() == ":")) {
+                        operators.pop();
+                        operators.push("'-'");
+                        operators.push(":");
+                    } else {
+                        operators.push("'-'");
+                    }
+                }
+            } else {
                 string op;
                 //char to string
                 op.assign(1, string1[i]);
@@ -146,17 +164,17 @@ Expression *Interpreter::interpret(string string1) {
                     operators.pop();
                     operators.push(op);
                     operators.push(":");
-                }
-                else {
+                } else {
                     operators.push(op);
                 }
             }
             i++;
         }
-        //if it's left paren
+            //if it's left paren
         else if (string1[i] == '(') {
-            if ((i != 0) && ((string1[i - 1] == '+') || (string1[i - 1] == '-') || (string1[i - 1] == '*') || (string1[i - 1] == '/'))) {
-                if ((i >= 2) && (string1[i-2] == ')')) {
+            if ((i != 0) && ((string1[i - 1] == '+') || (string1[i - 1] == '-') || (string1[i - 1] == '*') ||
+                             (string1[i - 1] == '/'))) {
+                if ((i >= 2) && (string1[i - 2] == ')')) {
                     //there are two expressions in one - ":" is the symbol for an inner expression
                     operators.push(":");
                 }
@@ -175,8 +193,7 @@ Expression *Interpreter::interpret(string string1) {
                                 operators.push("'-'");
                             }
                             operators.push(":");
-                        }
-                        else {
+                        } else {
                             operators.push("(");
                             if (string1[i - 1] == '+') {
                                 operators.push("'+'");
@@ -184,30 +201,25 @@ Expression *Interpreter::interpret(string string1) {
                                 operators.push("'-'");
                             }
                         }
-                    }
-                    else {
+                    } else {
                         if ((!operators.empty()) && (operators.top() == ":")) {
                             operators.pop();
                             operators.push("(");
                             operators.push(":");
-                        }
-                        else {
+                        } else {
                             operators.push("(");
                         }
                     }
-                }
-                else {
+                } else {
                     if ((!operators.empty()) && (operators.top() == ":")) {
                         operators.pop();
                         operators.push("(");
                         operators.push(":");
-                    }
-                    else {
+                    } else {
                         operators.push("(");
                     }
                 }
-            }
-            else {
+            } else {
                 if ((!operators.empty()) && (operators.top() == ":")) {
                     operators.pop();
                     operators.push("(");
@@ -218,7 +230,7 @@ Expression *Interpreter::interpret(string string1) {
             }
             i++;
         }
-        //if it's a right paren
+            //if it's a right paren
         else if (string1[i] == ')') {
             if (operators.empty()) {
                 throw "Exception, wrong infix expression, num of paren isn't equal";
@@ -233,163 +245,278 @@ Expression *Interpreter::interpret(string string1) {
             i++;
         }
     }
-    //when we finish to read the string and there are still operators in stack
-    while (!operators.empty()) {
-        if (operators.top() == "(") {
+//when we finish to read the string and there are still operators in stack
+    while (!operators.
+
+            empty()
+
+            ) {
+        if (operators.
+
+                top()
+
+            == "(") {
             throw "Exception, wrong infix expression, num of paren isn't equal";
         }
-        output.push(operators.top());
-        operators.pop();
+        output.
+                push(operators
+                             .
+
+                                     top()
+
+        );
+        operators.
+
+                pop();
+
     }
-    //postfix to expression
-    while (!output.empty()) {
-        //if it's a number, push it to the numbers stack
-        if (isdigit(output.front()[0])) {
-            numbers.push(stod(output.front()));
-            output.pop();
+//postfix to expression
+    while (!output.
+
+            empty()
+
+            ) {
+//if it's a number, push it to the numbers stack
+        if (
+                isdigit(output
+                                .
+
+                                        front()[0]
+
+                )) {
+            numbers.
+                    push(stod(output.front())
+            );
+            output.
+
+                    pop();
+
         }
-        //if it's an operator, make the relevant expression
+//if it's an operator, make the relevant expression
         else {
-            //UPlus expression
-            if (output.front() == "'+'") {
+//UPlus expression
+            if (output.
+
+                    front()
+
+                == "'+'") {
                 if (exp == nullptr) {
                     exp = new UPlus(new Value(numbers.top()));
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                 } else {
                     if (ex1 != nullptr) {
                         exp = new UPlus(ex1);
                         ex1 = nullptr;
-                    }
-                    else {
+                    } else {
                         exp = new UPlus(exp);
                     }
                 }
-                output.pop();
+                output.
+
+                        pop();
+
             } //UMinus expression
-            else if (output.front() == "'-'") {
+            else if (output.
+
+                    front()
+
+                     == "'-'") {
                 if (exp == nullptr) {
                     exp = new UMinus(new Value(numbers.top()));
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                 } else {
                     if (ex1 != nullptr) {
                         exp = new UMinus(ex1);
                         ex1 = nullptr;
-                    }
-                    else {
+                    } else {
                         exp = new UMinus(exp);
                     }
                 }
-                output.pop();
+                output.
+
+                        pop();
+
             } //Plus binary expression
-            else if (output.front() == "+") {
+            else if (output.
+
+                    front()
+
+                     == "+") {
                 if (exp == nullptr) {
                     double num1 = numbers.top();
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                     double num2 = numbers.top();
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                     exp = new Plus(new Value(num2), new Value(num1));
-                }
-                else {
+                } else {
                     if (ex1 != nullptr) {
                         exp = new Plus(exp, ex1);
                         ex1 = nullptr;
-                    }
-                    else {
+                    } else {
                         double num = numbers.top();
-                        numbers.pop();
+                        numbers.
+
+                                pop();
+
                         exp = new Plus(new Value(num), exp);
                     }
                 }
-                output.pop();
+                output.
+
+                        pop();
+
             } //Minus binary expression
-            else if (output.front() == "-") {
+            else if (output.
+
+                    front()
+
+                     == "-") {
                 if (exp == nullptr) {
                     double num1 = numbers.top();
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                     double num2 = numbers.top();
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                     exp = new Minus(new Value(num2), new Value(num1));
-                }
-                else {
+                } else {
                     if (ex1 != nullptr) {
                         exp = new Minus(exp, ex1);
                         ex1 = nullptr;
-                    }
-                    else {
+                    } else {
                         double num = numbers.top();
-                        numbers.pop();
-                        exp = new Minus(new Value(num), exp);
+                        numbers.
+
+                                pop();
+
+                        exp = new Minus(exp, new Value(num));
                     }
                 }
-                output.pop();
+                output.
+
+                        pop();
+
             } //Mult binary expression
-            else if (output.front() == "*") {
+            else if (output.
+
+                    front()
+
+                     == "*") {
                 if (exp == nullptr) {
                     double num1 = numbers.top();
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                     double num2 = numbers.top();
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                     exp = new Mul(new Value(num2), new Value(num1));
-                }
-                else {
+                } else {
                     if (ex1 != nullptr) {
                         exp = new Mul(exp, ex1);
                         ex1 = nullptr;
-                    }
-                    else {
+                    } else {
                         double num = numbers.top();
-                        numbers.pop();
+                        numbers.
+
+                                pop();
+
                         exp = new Mul(new Value(num), exp);
                     }
                 }
-                output.pop();
+                output.
+
+                        pop();
+
             } //Div binary expression
-            else if (output.front() == "/") {
+            else if (output.
+
+                    front()
+
+                     == "/") {
                 if (exp == nullptr) {
                     double num1 = numbers.top();
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                     double num2 = numbers.top();
-                    numbers.pop();
+                    numbers.
+
+                            pop();
+
                     exp = new Div(new Value(num2), new Value(num1));
-                }
-                else {
+                } else {
                     if (ex1 != nullptr) {
                         exp = new Div(exp, ex1);
                         ex1 = nullptr;
-                    }
-                    else {
+                    } else {
                         double num = numbers.top();
-                        numbers.pop();
-                        exp = new Div(new Value(num), exp);
+                        numbers.
+
+                                pop();
+
+                        exp = new Div(exp, new Value(num));
                     }
                 }
-                output.pop();
+                output.
+
+                        pop();
+
             } //inner expression
-            else if (output.front() == ":") {
-                output.pop();
+            else if (output.
+
+                    front()
+
+                     == ":") {
+                output.
+
+                        pop();
+
                 ex1 = anotherExp(output, numbers, ex1);
             }
         }
     }
-return exp;
+    return
+            exp;
 }
+
 bool Interpreter::isEqualOp(stack<string> s, char op) {
     if (!s.empty()) {
         if (((s.top() == "+") || (s.top() == "-")) && ((op == '+') || (op == '-'))) {
             return true;
-        }
-        else if (((s.top() == "*") || (s.top() == "/")) && ((op == '*') || (op == '/'))) {
+        } else if (((s.top() == "*") || (s.top() == "/")) && ((op == '*') || (op == '/'))) {
             return true;
         }
     }
     return false;
 }
+
 bool Interpreter::isHighOp(stack<string> s, char op) {
     if (!s.empty()) {
         if (((s.top() == "*") || (s.top() == "/")) && ((op == '+') || (op == '-'))) {
             return true;
         }
-        //the infix begin with a negative number
+            //the infix begin with a negative number
         else if ((s.top() == "'-'") && (s.size() == 1)) {
             return true;
         }
@@ -404,24 +531,21 @@ Expression *Interpreter::anotherExp(queue<string> &output, stack<double> &nums, 
             if (ex1 == nullptr) {
                 if (output.front() == "'-'") {
                     ex1 = new UMinus(new Value(nums.top()));
-                }
-                else {
+                } else {
                     ex1 = new UPlus(new Value(nums.top()));
                 }
                 output.pop();
                 nums.pop();
-            }
-            else {
+            } else {
                 if (output.front() == "'-'") {
                     ex1 = new UMinus(ex1);
-                }
-                else {
+                } else {
                     ex1 = new UPlus(ex1);
                 }
                 output.pop();
             }
         }
-        //binary expression
+            //binary expression
         else {
             if (ex1 != nullptr) {
                 if (output.front() == "-") {
@@ -436,8 +560,7 @@ Expression *Interpreter::anotherExp(queue<string> &output, stack<double> &nums, 
                 output.pop();
                 nums.pop();
                 return ex1;
-            }
-            else {
+            } else {
                 double n1 = nums.top();
                 nums.pop();
                 double n2 = nums.top();
