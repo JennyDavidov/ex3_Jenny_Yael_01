@@ -6,10 +6,12 @@
 #include "Assignment.h"
 #include <string>
 #include <iostream>
+#include <mutex>
 
 using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
+extern mutex mtx;
 
 int Sim::execute(string *str, Interpreter *interpreter) {
     int index;
@@ -38,7 +40,11 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         flyMap.insert(pair<string, Variable *>(key, reinterpret_cast<Variable *const>(&var)));
         string value1 = to_string(value);
         string strToInterpreter = key + "=" + value1;
-        interpreter->setVariables(strToInterpreter);
+        if(mtx.try_lock()) {
+            interpreter->setVariables(strToInterpreter);
+            mtx.unlock();
+        }
+
         return 2;
     }
     //defining variable to flyMap
@@ -57,7 +63,10 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         flyMap.insert(pair<string, Variable *>(key, simulatorMap.find(findSim)->second));
         string value = to_string(simulatorMap.find(findSim)->second->getValue());
         string strToInterpreter = key + "=" + value;
-        interpreter->setVariables(strToInterpreter);
+        if (mtx.try_lock()) {
+            interpreter->setVariables(strToInterpreter);
+            mtx.unlock();
+        }
         return 5;
     }
 }

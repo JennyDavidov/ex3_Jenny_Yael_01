@@ -6,6 +6,7 @@
 #include "ConnectControlClientCommand.h"
 #include <string>
 #include <iostream>
+#include <thread>
 
 using namespace std;
 extern map<string, Variable *> simulatorMap;
@@ -17,13 +18,16 @@ int Print::execute(string *str, Interpreter *interpreter) {
     if (s.find("\"") != string::npos) {
         s.erase(0, 1);
         s.erase(s.length() - 1, 1);
+        cout << s << endl;
     }
     else {
         auto c = flyMap.find(s);
         double d = c->second->getValue();
         s = to_string(d);
+        cout << s << endl;
+        chrono::duration<int, milli> dur(1000);
+        this_thread::sleep_for(dur);
     }
-    cout << s << endl;
     return 2;
 }
 

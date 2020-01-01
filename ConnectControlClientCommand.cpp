@@ -74,7 +74,7 @@ void ConnectControlClientCommand::sendToSimulator(int client_socket) {
             if (is_sent == -1) {
                 std::cout << "Error sending message" << std::endl;
             } else {
-                std::cout << messagesQueue.front() + "sent to server" << std::endl;
+                //std::cout << messagesQueue.front() + "sent to server" << std::endl;
             }
             messagesQueue.pop();
         }

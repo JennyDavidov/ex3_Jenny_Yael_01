@@ -80,7 +80,7 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
 
 OpenDataServerCommand::OpenDataServerCommand() {}
 
-void OpenDataServerCommand::openServer(string *str, int client_socket, Interpreter* interpreter) {
+void OpenDataServerCommand::openServer(string *str, int client_socket, Interpreter *interpreter) {
 
     //reading from client
     int j = 0;
@@ -90,7 +90,9 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
     string temp = "";
     bool firstValues;
     string sBegin = "", sEnd = "";
+    chrono::duration<int, milli> d(1500);
     while (read(client_socket, buffer, 1024) > 0) {
+        this_thread::sleep_for(d);
         firstValues = true;
         j = 0;
         //convert char array to string
@@ -127,10 +129,10 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                     s = s.substr(index + 1);
                 }
                 if (readData[0] == ',') {
-                    readData.erase(0,1);
+                    readData.erase(0, 1);
                 }
                 if (readData[readData.length() - 1] == ',') {
-                    readData.erase(readData.length()-1, 1);
+                    readData.erase(readData.length() - 1, 1);
                 }
                 size_t findComma = (readData).find_first_of(",");
                 while ((findComma != string::npos) && (j < 36)) {
@@ -146,7 +148,7 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                             c->setValue(value);
                             mtx.unlock();
                         }
-                        map<string, Variable*>::iterator it;
+                        map<string, Variable *>::iterator it;
                         string key = "";
                         for (it = flyMap.begin(); it != flyMap.end(); ++it) {
                             if (it->second == c) {
@@ -157,8 +159,14 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                         if (key != "") {
                             string value = to_string(c->getValue());
                             string strToInterpreter = key + "=" + value;
-                            interpreter->setVariables(strToInterpreter);
+                            if (mtx.try_lock()) {
+                                interpreter->setVariables(strToInterpreter);
+                                mtx.unlock();
+                            }
                         }
+                    }
+                    if (j == 4) {
+                        cout << "alt is" + to_string(simulatorMap.find(xmlDetails[j])->second->getValue()) << endl;
                     }
                     findComma = (readData).find_first_of(",");
                     j++;
@@ -174,7 +182,7 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                                 c->setValue(value);
                                 mtx.unlock();
                             }
-                            map<string, Variable*>::iterator it;
+                            map<string, Variable *>::iterator it;
                             string key = "";
                             for (it = flyMap.begin(); it != flyMap.end(); ++it) {
                                 if (it->second == c) {
@@ -185,7 +193,10 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                             if (key != "") {
                                 string value = to_string(c->getValue());
                                 string strToInterpreter = key + "=" + value;
-                                interpreter->setVariables(strToInterpreter);
+                                if (mtx.try_lock()) {
+                                    interpreter->setVariables(strToInterpreter);
+                                    mtx.unlock();
+                                }
                             }
                         }
                         j++;
