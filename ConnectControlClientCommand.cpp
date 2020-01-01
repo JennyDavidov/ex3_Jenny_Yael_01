@@ -37,7 +37,7 @@ void ConnectControlClientCommand::openClient(string *str, Interpreter *interpret
 
     sockaddr_in address;
     address.sin_family = AF_INET;
-   // str += 1;
+    // str += 1;
     (*str).erase((*str).length() - 1);
     (*str).erase(0, 1);
     address.sin_addr.s_addr = inet_addr(reinterpret_cast<const char *>((*str).c_str()));

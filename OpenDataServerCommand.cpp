@@ -127,6 +127,7 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                     readData = sEnd + sBegin;
                     sEnd = "";
                     s = s.substr(index + 1);
+
                 }
                 if (readData[0] == ',') {
                     readData.erase(0, 1);
