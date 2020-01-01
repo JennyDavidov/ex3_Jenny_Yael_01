@@ -70,12 +70,12 @@ void ConnectControlClientCommand::sendToSimulator(int client_socket) {
        while (!messagesQueue.empty()) {
             const char * c = messagesQueue.front().c_str();
             //message = message.c_str();
-        if (message != "") {
-            const char *c = message.c_str();
-            auto obj = flyMap.find(globalName);
-            mtx.lock();
-            obj->second->setValue(globalValue);
-            mtx.unlock();
+            int is_sent = send(client_socket, c, strlen(c), 0);
+            if (is_sent == -1) {
+                std::cout << "Error sending message" << std::endl;
+            } else {
+                //std::cout << messagesQueue.front() + "sent to server" << std::endl;
+            }
             messagesQueue.pop();
         }
     }

@@ -49,7 +49,10 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
     string valueSetString = to_string(valueForSet);
     //updating the variables map of interpreter
     string strToInterpreter = name + "=" + valueSetString;
-    interpreter->setVariables(strToInterpreter);
+    if (mtx.try_lock()) {
+        interpreter->setVariables(strToInterpreter);
+        mtx.unlock();
+    }
     //Prepare set message to simulator
     string path = c->second->getName();
     string messageToSet = "set " + path + " " + valueSetString + "\r\n";
