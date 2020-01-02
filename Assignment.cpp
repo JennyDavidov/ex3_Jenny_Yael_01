@@ -3,7 +3,6 @@
 //
 
 #include "Assignment.h"
-#include "Sleep.h"
 #include <string>
 #include <cstring>
 #include <mutex>
@@ -15,8 +14,6 @@ extern queue<string> messagesQueue;
 extern mutex mtx;
 
 int Assignment::execute(string *str, Interpreter *interpreter) {
-    //if the string contains expression
-    //split it into Var name , value
     string name, value;
     double doubleValue;
     //delete spaces
@@ -25,15 +22,18 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
         (*str).replace((*str).find(" "), 1, "");
         findSpace = (*str).find_first_of(" ");
     }
+    //split it into Var name , value
     size_t findEqual = str->find_first_of("=");
     if (findEqual != string::npos) {
         name = (*str).substr(0, findEqual);
         value = (*str).substr(findEqual + 1);
     }
+    //if the value is an expression
     if (value.find_first_of("+-/*") != string::npos) {
         Expression *ex = interpreter->interpret(value);
         doubleValue = ex->calculate();
     } else {
+        //the value is just a number
         doubleValue = stod(value);
     }
     //Update value in fly map

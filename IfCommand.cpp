@@ -3,29 +3,26 @@
 //
 
 #include "IfCommand.h"
-
 #include "Assignment.h"
 #include "Sleep.h"
 #include "Print.h"
 #include "Sim.h"
 #include <string>
 
+extern map<string, Variable *> flyMap;
 using namespace std;
 
 int IfCommand::execute(string *str, Interpreter *interpreter) {
     vector<string> commands;
     vector<string>::iterator it;
-    it = commands.begin();
-    //str += 1;
     int i = 0;
-    //keeping condition of while
+    //keeping condition of if
     (*str).replace((*str).find("{"), 1, "");
     string condition = (*str);
     str += 1;
-    //inserting the commands of the while to a vector
+    //inserting the commands of the if to a vector
     while ((*str) != "}") {
-        commands.insert(it, 1, (*str));
-        it++;
+        commands.insert(commands.begin(), 1, (*str));
         i++;
         str += 1;
     }
@@ -39,17 +36,17 @@ int IfCommand::execute(string *str, Interpreter *interpreter) {
     string name, value, cond;
     Expression *left, *right;
     if (findEqual != string::npos) {
-        //finding the condition of the while
-        if (reinterpret_cast<const char *>(condition[findEqual]) == "!") {
+        //finding the condition of the if
+        if ((condition[findEqual]) == '!') {
             cond = "!=";
-        } else if (reinterpret_cast<const char *>(condition[findEqual]) == "<") {
-            if (reinterpret_cast<const char *>(condition[findEqual + 1]) == "=") {
+        } else if ((condition[findEqual]) == '<') {
+            if ((condition[findEqual + 1]) == '=') {
                 cond = "<=";
             } else {
                 cond = "<";
             }
-        } else if (reinterpret_cast<const char *>(condition[findEqual]) == ">") {
-            if (reinterpret_cast<const char *>(condition[findEqual + 1]) == "=") {
+        } else if ((condition[findEqual]) == '>') {
+            if ((condition[findEqual + 1]) == '=') {
                 cond = ">=";
             } else {
                 cond = ">";
@@ -57,16 +54,24 @@ int IfCommand::execute(string *str, Interpreter *interpreter) {
         } else {
             cond = "==";
         }
-        //dividing the expression to left and right
+        //dividing the expression to left expression and right expression
         name = (condition).substr(0, findEqual);
-        left = interpreter->interpret(name);
+        if (name.find_first_of("+-/*") != string::npos) {
+            left = interpreter->interpret(name);
+        } else {
+            left = new Value(flyMap.find(name)->second->getValue());
+        }
         if (cond.length() == 2) {
             value = (condition).substr(findEqual + 2);
         } else {
             value = (condition).substr(findEqual + 1);
         }
-        right = interpreter->interpret(value);
-        //making the while loop
+        if (value.find_first_of("+-/*") != string::npos) {
+            right = interpreter->interpret(value);
+        } else {
+            right = new Value(stod(value));
+        }
+        //making the if scope and calling commands if the condition is right
         if (cond == "!=") {
             if (left->calculate() != right->calculate()) {
                 callingCommand(commands, interpreter);
@@ -92,7 +97,6 @@ int IfCommand::execute(string *str, Interpreter *interpreter) {
                 callingCommand(commands, interpreter);
             }
         }
-
     }
     return (i + 3);
 }
@@ -100,24 +104,24 @@ int IfCommand::execute(string *str, Interpreter *interpreter) {
 IfCommand::IfCommand() {}
 
 void IfCommand::callingCommand(vector<string> commands, Interpreter *interpreter) {
-    for (int i = 0; i < commands.size(); i++) {
+    //going through commands of the "if" scope and call their execute
+    for (int i = commands.size()-1; i >= 0; i--) {
         if (commands.at(i) == "Print") {
             Print *print = new Print();
-            print->execute(&commands.at(i+1), interpreter);
-            i++;
+            print->execute(&commands.at(i-1), interpreter);
+            i--;
         } else if (commands.at(i) == "Sleep") {
             Sleep *sleep = new Sleep();
-            sleep->execute(&commands.at(i+1), interpreter);
-            i++;
+            sleep->execute(&commands.at(i-1), interpreter);
+            i--;
         } else if (commands.at(i) == "var") {
             Sim *var = new Sim();
-            var->execute(&commands.at(i+1), interpreter);
-            i++;
+            var->execute(&commands.at(i-1), interpreter);
+            i--;
         } else {
             Assignment *ass = new Assignment();
-            ass->execute(&commands.at(i+1), interpreter);
-            i++;
+            ass->execute(&commands.at(i-1), interpreter);
+            i--;
         }
     }
-
 }

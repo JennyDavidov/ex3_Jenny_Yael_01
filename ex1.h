@@ -77,7 +77,7 @@ public:
     int getDirection() const;
 
 public:
-    void setDirection(int direction);
+    void setDirection(int direction1);
 
 public:
     Variable(string _name, double _value);

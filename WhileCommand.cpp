@@ -15,8 +15,6 @@ using namespace std;
 int WhileCommand::execute(string *str, Interpreter *interpreter) {
     vector<string> commands;
     vector<string>::iterator it;
-    //it = commands.begin();
-   // str += 1;
     int i = 0;
     //keeping condition of while
     (*str).replace((*str).find("{"), 1, "");

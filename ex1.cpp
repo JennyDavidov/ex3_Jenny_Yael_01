@@ -108,13 +108,9 @@ double UMinus::calculate() {
 }
 
 Variable::Variable(string _name, double _value) {
-//    if (!checkName(_name)) {
-//        throw "Exception, wrong variable _name";
-//    } else {
         this->sim = std::move(_name);
         this->value = _value;
         this->direction = -1;
-  //  }
 }
 Variable::~Variable() {
 }
@@ -184,8 +180,8 @@ double Value::calculate() {
     return this->getValue();
 }
 
-void Variable::setDirection(int direction) {
-    this->direction = direction;
+void Variable::setDirection(int direction1) {
+    this->direction = direction1;
 }
 
 int Variable::getDirection() const {
