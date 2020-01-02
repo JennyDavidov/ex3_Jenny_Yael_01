@@ -20,7 +20,7 @@ The requirements that we should implements in this project were:
 
 ### Running the tests
 In order to run the proggram, meaning see the plane flying, you should provide fly.txt file.
-This file shoukld include commands, in the new programming language that the project interprets. 
+This file should include commands, in the new programming language that the project interprets. 
 After running the file, you will see in the console several messages that indicates the plane status,
 from "let's fly" at the begining until "done" at the end of the fly.
 
