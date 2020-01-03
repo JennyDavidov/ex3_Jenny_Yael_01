@@ -30,6 +30,7 @@ In order to run the program, you should follow the following instructions:
 --telnet=socket,in,10,127.0.0.1,5402,tcp
 *  Compile with the command:
 g++ -std=c++14 *.cpp -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -o a.out -pthread
+
 After running the file, you will see in the console several messages that indicates the plane status. 
 In the begining, we will recieve a messge that the server is listening and then we can press the fly! bottun.
 After the connection with the client succedded as well, we will recieve a message that we need to wait two minutes so the gui screen could be loaded.
