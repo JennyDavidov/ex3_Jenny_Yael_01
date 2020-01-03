@@ -54,7 +54,7 @@ int WhileCommand::execute(string *str, Interpreter *interpreter) {
         } else {
             cond = "==";
         }
-        //dividing the expression to left and right
+        //dividing the expression to left expression and right expression
         name = (condition).substr(0, findEqual);
         if (name.find_first_of("+-/*") != string::npos) {
             left = interpreter->interpret(name);
@@ -71,7 +71,8 @@ int WhileCommand::execute(string *str, Interpreter *interpreter) {
         } else {
             right = new Value(stod(value));
         }
-        //making the while loop
+        //making the while loop, calling commands if the condition is correct
+        // and updating the left and right expressions
         if (cond == "!=") {
             while (left->calculate() != right->calculate()) {
                 callingCommand(commands, interpreter);
@@ -165,6 +166,7 @@ int WhileCommand::execute(string *str, Interpreter *interpreter) {
 WhileCommand::WhileCommand() {}
 
 void WhileCommand::callingCommand(vector<string> commands, Interpreter *interpreter) {
+    //going through commands of the "while" scope and call their execute
     for (int i = commands.size()-1; i >= 0; i--) {
         if (commands.at(i) == "Print") {
             Print *print = new Print();

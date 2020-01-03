@@ -71,7 +71,7 @@ int IfCommand::execute(string *str, Interpreter *interpreter) {
         } else {
             right = new Value(stod(value));
         }
-        //making the if scope and calling commands if the condition is right
+        //making the if scope and calling commands if the condition is correct
         if (cond == "!=") {
             if (left->calculate() != right->calculate()) {
                 callingCommand(commands, interpreter);
