@@ -8,6 +8,7 @@
 #include <iostream>
 #include <mutex>
 
+
 using namespace std;
 extern map<string, Variable *> simulatorMap;
 extern map<string, Variable *> flyMap;
@@ -44,7 +45,7 @@ int Sim::execute(string *str, Interpreter *interpreter) {
         }
         return 2;
     }
-    //defining variable to flyMap
+        //defining variable to flyMap
     else {
         key = (*str);
         (str) += 1;
@@ -69,6 +70,7 @@ int Sim::execute(string *str, Interpreter *interpreter) {
             interpreter->setVariables(strToInterpreter);
             mtx.unlock();
         }
+
         return 5;
     }
 }

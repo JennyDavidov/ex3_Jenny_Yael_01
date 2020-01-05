@@ -123,6 +123,7 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                     readData = sEnd + sBegin;
                     sEnd = "";
                     s = s.substr(index + 1);
+
                 }
                 //deleting commas from the beginning and end of string
                 if (readData[0] == ',') {

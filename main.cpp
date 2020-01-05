@@ -23,7 +23,6 @@ extern string xmlDetails[36];
 map<string, Variable *> simulatorMap;
 map<string, Variable *> flyMap;
 queue<string> messagesQueue;
-mutex mtx;
 
 vector<string> lexerFunc(ifstream &file);
 

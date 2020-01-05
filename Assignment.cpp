@@ -36,6 +36,9 @@ int Assignment::execute(string *str, Interpreter *interpreter) {
         //the value is just a number
         doubleValue = stod(value);
     }
+    //updating global values
+    globalName = name;
+    globalValue = doubleValue;
     //Update value in fly map
     auto c = flyMap.find(name);
     if (mtx.try_lock()) {
