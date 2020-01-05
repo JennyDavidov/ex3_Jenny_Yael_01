@@ -3,7 +3,6 @@
 #include <cstring>
 #include <vector>
 #include <string>
-#include <iterator>
 #include <map>
 #include "Command.h"
 #include "OpenDataServerCommand.h"
@@ -12,7 +11,6 @@
 #include "Sleep.h"
 #include "Print.h"
 #include "xml.h"
-#include "Expression.h"
 #include "interpreter.h"
 #include "WhileCommand.h"
 #include "IfCommand.h"
@@ -36,7 +34,6 @@ int main(int argc, char *argv[]) {
 
     map<string, Command *> commandMap;
     vector<string> array;
-    //vector<string> xmlDetails;
     Interpreter *interpreter = new Interpreter();
     //no arguments provided
     if (argc == 0) {
@@ -66,10 +63,15 @@ vector<string> lexerFunc(ifstream &file) {
     string buffer, param;
     //reading the first line
     getline(file, buffer);
+    //deleting spaces from beginning of line
+    while(buffer[i] == ' ') {
+        buffer.replace(i, 1, "");
+        i++;
+    }
     //separate it by ( or ,
     size_t index = buffer.find_first_of("(,");
     while (index != string::npos) {
-        param = buffer.substr(0, index);
+        param = buffer.substr(i, index);
         if (param.find("\t") != string::npos) {
             param.replace(param.find("\t"), 1, "");
         }
@@ -79,17 +81,21 @@ vector<string> lexerFunc(ifstream &file) {
     }
     param = buffer.erase(buffer.length() - 1);
     if (param.find("\t") != string::npos) {
-        int i = param.find("\t");
         param.replace(param.find("\t"), 1, "");
     }
     array.push_back(param);
     //reading all other lines of file
     while (getline(file, buffer)) {
+        //deleting spaces from beginning of line
+        while(buffer[i] == ' ') {
+            buffer.replace(i, 1, "");
+            i++;
+        }
         //if the line is var definition
         size_t isVar = buffer.find("var");
         if (isVar != string::npos) {
             array.push_back("var");
-            buffer = buffer.substr(4);
+            buffer = buffer.substr(i+4);
             index = buffer.find("->");
             if (index == string::npos) {
                 index = buffer.find("<-");
@@ -122,23 +128,23 @@ vector<string> lexerFunc(ifstream &file) {
                 array.push_back(buffer);
             }
         }
-            //other lines that aren't var definition
+        //other lines that aren't var definition
         else {
             if (buffer.find("while") != string::npos) {
                 //inserting 'while'
-                param = buffer.substr(0, 5);
+                param = buffer.substr(i, 5);
                 array.push_back(param);
                 //insert rest of buffer
-                buffer = buffer.substr(6);
+                buffer = buffer.substr(i+6);
                 array.push_back(buffer);
             } else if (buffer.find("if") != string::npos) {
                 //insert 'if'
-                param = buffer.substr(0, 2);
+                param = buffer.substr(i, 2);
                 array.push_back(param);
                 //insert rest of buffer
-                buffer = buffer.substr(3);
+                buffer = buffer.substr(i+3);
                 array.push_back(buffer);
-            } else if (buffer.find(" = ") != string::npos) {
+            } else if (buffer.find("=") != string::npos) {
                 if (buffer.find("\t") != string::npos) {
                     buffer.replace(buffer.find("\t"), 1, "");
                 }
@@ -147,9 +153,10 @@ vector<string> lexerFunc(ifstream &file) {
             } else if (buffer.find('}') != string::npos) {
                 array.push_back(buffer);
             } else {
+                //reading other lines that didn't match earlier conditions
                 index = buffer.find_first_of("(,");
                 while (index != string::npos) {
-                    param = buffer.substr(0, index);
+                    param = buffer.substr(i, index);
                     if (param.find("\t") != string::npos) {
                         param.replace(param.find("\t"), 1, "");
                     }
@@ -167,6 +174,7 @@ vector<string> lexerFunc(ifstream &file) {
 
 map<string, Command *> mapCreator() {
     map<string, Command *> commandMap;
+    //making new objects of commands
     Command *open = new OpenDataServerCommand();
     Command *connect = new ConnectControlClientCommand();
     Command *sim = new Sim();
@@ -175,6 +183,7 @@ map<string, Command *> mapCreator() {
     Command *ass = new Assignment();
     Command *whileCommand = new WhileCommand();
     Command *ifCommand = new IfCommand();
+    //insert to map the key and the command object
     commandMap.emplace("openDataServer", open);
     commandMap.emplace("connectControlClient", connect);
     commandMap.emplace("var", sim);
@@ -183,12 +192,12 @@ map<string, Command *> mapCreator() {
     commandMap.emplace("ass", ass);
     commandMap.emplace("while", whileCommand);
     commandMap.emplace("if", ifCommand);
-
     return commandMap;
 }
 
 void parserFunc(vector<string> array, map<string, Command *> mapCommand, Interpreter *interpreter) {
-    int index = 0;
+    unsigned int index = 0;
+    //going through the array we made from the lexer and dynamic cast each command and call their execute
     while (index < array.size()) {
         if (mapCommand.find(array[index]) != mapCommand.end()) {
             auto c = mapCommand.find(array[index])->second;

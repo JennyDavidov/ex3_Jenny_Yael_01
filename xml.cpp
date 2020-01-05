@@ -6,7 +6,7 @@
 
 using namespace std;
 string xmlDetails[36];
-
+//creating an array from the sim of values in xml
 void readingXml() {
     xmlDetails[0] = "/instrumentation/airspeed-indicator/indicated-speed-kt";//1
     xmlDetails[1] = "/sim/time/warp";//2

@@ -8,11 +8,8 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <thread>
-#include <string>
-#include <cstring>
 #include <map>
 #include "ex1.h"
-#include "xml.h"
 #include "Expression.h"
 #include "interpreter.h"
 #include <mutex>
@@ -35,21 +32,19 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
 
     //bind socket to IP address
     // we first need to create the sockaddr obj.
-    sockaddr_in address; //in means IP4
+    sockaddr_in address;
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY; //give me any IP allocated for my machine
-    // str += 1;
+    address.sin_addr.s_addr = INADDR_ANY;
     unsigned short port;
+    //if port is an expression
     if (str->find_first_of("+-/*") != string::npos) {
         Expression *ex = interpreter->interpret(*str);
         port = ex->calculate();
     } else {
+        //if port is a number
         port = stod(*str);
     }
     address.sin_port = htons(port);
-    //we need to convert our number
-    // to a number that the network understands.
-
     //the actual bind command
     if (bind(socketfd, (struct sockaddr *) &address, sizeof(address)) == -1) {
         std::cerr << "Could not bind the socket to an IP" << std::endl;
@@ -57,7 +52,7 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     }
 
     //making socket listen to the port
-    if (listen(socketfd, 5) == -1) { //can also set to SOMAXCON (max connections)
+    if (listen(socketfd, 5) == -1) {
         std::cerr << "Error during listening command" << std::endl;
         exit(-1);
     } else {
@@ -66,13 +61,15 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
     // accepting a client
     int client_socket = accept(socketfd, (struct sockaddr *) &address,
                                (socklen_t *) &address);
-
     if (client_socket == -1) {
         std::cerr << "Error accepting client" << std::endl;
         exit(-1);
     }
-    close(socketfd); //closing the listening socket
+    //closing the listening socket
+    close(socketfd);
+    //creating simulator map for the first time
     simulatorMapCreate(client_socket);
+    //create thread
     thread serverThread(openServer, str, client_socket, interpreter);
     serverThread.detach();
     return 2;
@@ -81,16 +78,14 @@ int OpenDataServerCommand::execute(string *str, Interpreter *interpreter) {
 OpenDataServerCommand::OpenDataServerCommand() {}
 
 void OpenDataServerCommand::openServer(string *str, int client_socket, Interpreter *interpreter) {
-
-    //reading from client
     int j = 0;
-    int n = 0;
     char buffer[1024] = "";
     string readData = "";
     string temp = "";
     bool firstValues;
     string sBegin = "", sEnd = "";
     chrono::duration<int, milli> d(1500);
+    //while we have things to read from simulator
     while (read(client_socket, buffer, 1024) > 0) {
         this_thread::sleep_for(d);
         firstValues = true;
@@ -98,12 +93,13 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
         //convert char array to string
         string s = "";
         string check;
-        for (int i = 0; i < sizeof(buffer); i++) {
+        for (unsigned int i = 0; i < sizeof(buffer); i++) {
             if (buffer[i] == '\0') {
                 break;
             }
             s = s + buffer[i];
         }
+        //while we didn't finish passing the s string
         while (s.length() > 0) {
             size_t index = s.find_first_of("\n");
             while (index != string::npos) {
@@ -129,6 +125,7 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                     s = s.substr(index + 1);
 
                 }
+                //deleting commas from the beginning and end of string
                 if (readData[0] == ',') {
                     readData.erase(0, 1);
                 }
@@ -136,14 +133,17 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                     readData.erase(readData.length() - 1, 1);
                 }
                 size_t findComma = (readData).find_first_of(",");
+                //reading the 36 values and separating them by the comma
                 while ((findComma != string::npos) && (j < 36)) {
                     temp = (readData).substr(0, findComma);
                     readData = readData.substr(findComma + 1);
                     double value = stod(temp);
+                    //inserting new object
                     if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
                         simulatorMap.insert(
                                 pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], value)));
                     } else {
+                        //updating value of variable object
                         auto c = simulatorMap.find(xmlDetails[j])->second;
                         if (mtx.try_lock()) {
                             c->setValue(value);
@@ -157,30 +157,31 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                                 break;
                             }
                         }
+                        //updating the value in the variables map of interpreter
                         if (key != "") {
-                            string value = to_string(c->getValue());
-                            string strToInterpreter = key + "=" + value;
+                            string valueString = to_string(c->getValue());
+                            string strToInterpreter = key + "=" + valueString;
                             if (mtx.try_lock()) {
                                 interpreter->setVariables(strToInterpreter);
                                 mtx.unlock();
                             }
                         }
                     }
-                    if (j == 4) {
-                        cout << "alt is" + to_string(simulatorMap.find(xmlDetails[j])->second->getValue()) << endl;
-                    }
                     findComma = (readData).find_first_of(",");
                     j++;
+                    //last element received from the simulator
                     if ((j == 35) && (findComma == string::npos) && (readData != "")) {
-                        double value = stod(readData);
+                        double lastValue = stod(readData);
                         readData = "";
+                        //inserting the new value
                         if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
                             simulatorMap.insert(
-                                    pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], value)));
+                                    pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], lastValue)));
                         } else {
+                            //updating existing value
                             auto c = simulatorMap.find(xmlDetails[j])->second;
                             if (mtx.try_lock()) {
-                                c->setValue(value);
+                                c->setValue(lastValue);
                                 mtx.unlock();
                             }
                             map<string, Variable *>::iterator it;
@@ -191,9 +192,10 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
                                     break;
                                 }
                             }
+                            //updating the value in the variables map of interpreter
                             if (key != "") {
-                                string value = to_string(c->getValue());
-                                string strToInterpreter = key + "=" + value;
+                                string valueString = to_string(c->getValue());
+                                string strToInterpreter = key + "=" + valueString;
                                 if (mtx.try_lock()) {
                                     interpreter->setVariables(strToInterpreter);
                                     mtx.unlock();
@@ -211,20 +213,20 @@ void OpenDataServerCommand::openServer(string *str, int client_socket, Interpret
             s = "";
         }
     }
+    close(client_socket);
     return;
 }
 
 void OpenDataServerCommand::simulatorMapCreate(int client_socket) {
 //reading from client
     int j = 0;
-    int n = 0;
     char buffer[1024] = "";
     string readData = "";
     string temp = "";
     if (read(client_socket, buffer, 1024) > 0) {
         //convert char array to string
         string s = "";
-        for (int i = 0; i < sizeof(buffer); i++) {
+        for (unsigned int i = 0; i < sizeof(buffer); i++) {
             if (buffer[i] == '\0') {
                 break;
             }
@@ -233,20 +235,23 @@ void OpenDataServerCommand::simulatorMapCreate(int client_socket) {
         size_t index = s.find_first_of("\n");
         readData = (s).substr(0, index);
         size_t findComma = (readData).find_first_of(",");
+        //reading the 36 values and separating them by the comma
         while ((findComma != string::npos) && (j < 36)) {
             temp = (readData).substr(0, findComma);
             readData = readData.substr(findComma + 1);
             double value = stod(temp);
+            //inserting the new variable object
             if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
                 simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], value)));
             }
             findComma = (readData).find_first_of(",");
             j++;
+            //inserting the last variable object
             if ((j == 35) && (findComma == string::npos) && (readData != "")) {
-                double value = stod(readData);
+                double lastValue = stod(readData);
                 readData = "";
                 if (simulatorMap.find(xmlDetails[j]) == simulatorMap.end()) {
-                    simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], value)));
+                    simulatorMap.insert(pair<string, Variable *>(xmlDetails[j], new Variable(xmlDetails[j], lastValue)));
                 }
                 j++;
             }
