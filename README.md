@@ -12,7 +12,6 @@ It explicitly says how to download on which OS and where the files exist once yo
 If you're using Ubuntu, you can install flightgear from the app store (software center) that ubuntu has.
 
 
-### Prerequisites
 The requirements that we should implements in this project were:
 * Design patterns.
 * Client server communication.
